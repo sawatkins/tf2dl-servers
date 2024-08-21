@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env
+
 if ! terraform apply; then
     echo "Error: Terraform apply failed or was declined."
     exit 1
