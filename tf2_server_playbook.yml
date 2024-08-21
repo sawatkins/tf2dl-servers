@@ -1,6 +1,14 @@
 - name: Configure TF2 Server
   hosts: tf2_server
   become: yes
+  vars:
+    tf2_env:
+      SRCDS_TOKEN: "{{ srcds_token }}"
+      SRCDS_RCONPW: "{{ srcds_rconpw }}"
+      SRCDS_PW: "{{ srcds_pw }}"
+      SRCDS_STARTMAP: "{{ srcds_startmap }}"
+      SRCDS_HOSTNAME: "{{ srcds_hostname }}"
+      SRCDS_SECURED: "{{ srcds_secured | string }}"
   tasks:
     - name: Run TF2 server Docker container
       docker_container:
@@ -9,26 +17,15 @@
         state: started
         recreate: yes
         network_mode: host
-        env:
-          SRCDS_TOKEN: "{{ lookup('env', 'SRCDS_TOKEN') }}"
-          SRCDS_RCONPW: "{{ lookup('env', 'SRCDS_RCONPW') }}"
-          SRCDS_PW: "{{ lookup('env', 'SRCDS_PW') }}"
-          SRCDS_STARTMAP: "{{ lookup('env', 'SRCDS_STARTMAP') }}"
-          SRCDS_HOSTNAME: "{{ lookup('env', 'SRCDS_HOSTNAME') }}"
-          SRCDS_SECURED: "{{ lookup('env', 'SRCDS_SECURED') }}"
+        env: "{{ tf2_env }}"
         interactive: yes
         tty: yes
+        detach: yes
 
     - name: Restart TF2 server Docker container
       docker_container:
         name: tf2-dedicated
         state: started
-        env:
-          SRCDS_TOKEN: "{{ lookup('env', 'SRCDS_TOKEN') }}"
-          SRCDS_RCONPW: "{{ lookup('env', 'SRCDS_RCONPW') }}"
-          SRCDS_PW: "{{ lookup('env', 'SRCDS_PW') }}"
-          SRCDS_STARTMAP: "{{ lookup('env', 'SRCDS_STARTMAP') }}"
-          SRCDS_HOSTNAME: "{{ lookup('env', 'SRCDS_HOSTNAME') }}"
-          SRCDS_SECURED: "{{ lookup('env', 'SRCDS_SECURED') }}"
+        env: "{{ tf2_env }}"
         restart: yes
       tags: restart
