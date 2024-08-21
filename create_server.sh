@@ -11,6 +11,7 @@ public_dns=$(terraform output -raw instance_public_dns)
 
 # Create hosts.ini file
 if ! cat > hosts.ini <<-EOF
+[tf2_server]
 $public_dns ansible_user=ec2-user ansible_ssh_private_key_file=$SSH_PRIVATE_KEY_PATH
 EOF
 then
