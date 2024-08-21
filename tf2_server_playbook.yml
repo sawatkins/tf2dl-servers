@@ -18,3 +18,17 @@
           SRCDS_SECURED: "{{ lookup('env', 'SRCDS_SECURED') }}"
         interactive: yes
         tty: yes
+
+    - name: Restart TF2 server Docker container
+      docker_container:
+        name: tf2-dedicated
+        state: started
+        env:
+          SRCDS_TOKEN: "{{ lookup('env', 'SRCDS_TOKEN') }}"
+          SRCDS_RCONPW: "{{ lookup('env', 'SRCDS_RCONPW') }}"
+          SRCDS_PW: "{{ lookup('env', 'SRCDS_PW') }}"
+          SRCDS_STARTMAP: "{{ lookup('env', 'SRCDS_STARTMAP') }}"
+          SRCDS_HOSTNAME: "{{ lookup('env', 'SRCDS_HOSTNAME') }}"
+          SRCDS_SECURED: "{{ lookup('env', 'SRCDS_SECURED') }}"
+        restart: yes
+      tags: restart
