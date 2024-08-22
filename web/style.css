@@ -144,8 +144,8 @@ div.footer p {
 }
 
 .server-status table {
-  width: 80%;
-  max-width: 600px;
+  width: 90%;
+  max-width: 700px;
   border-collapse: collapse;
   background-color: #2a3748;
   border-radius: 4px;
