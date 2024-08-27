@@ -26,12 +26,8 @@ create_server() {
         "$public_dns ansible_user=ec2-user ansible_ssh_private_key_file=$SSH_PRIVATE_KEY_PATH" \
         "" \
         "[tf2_server:vars]" \
-        "srcds_token=$SRCDS_TOKEN" \
-        "srcds_rconpw=$SRCDS_RCONPW" \
-        "srcds_pw=$SRCDS_PW" \
-        "srcds_startmap=$SRCDS_STARTMAP" \
-        "srcds_hostname=$SRCDS_HOSTNAME" \
-        "srcds_secured=$SRCDS_SECURED" \
+        "rcon_password=$RCON_PASSWORD" \
+        "server_hostname=$SERVER_HOSTNAME" \
         > hosts.ini
     then
         echo "Error: Failed to create hosts.ini file."

@@ -5,3 +5,4 @@ terraform.tfstate.backup
 .env
 x1*
 hosts.ini
+.DS_Store

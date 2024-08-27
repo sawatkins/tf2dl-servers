@@ -3,17 +3,13 @@
   become: yes
   vars:
     tf2_env:
-      SRCDS_TOKEN: "{{ srcds_token }}"
-      SRCDS_RCONPW: "{{ srcds_rconpw }}"
-      SRCDS_PW: "{{ srcds_pw }}"
-      SRCDS_STARTMAP: "{{ srcds_startmap }}"
-      SRCDS_HOSTNAME: "{{ srcds_hostname }}"
-      SRCDS_SECURED: "{{ srcds_secured | string }}"
+      RCON_PASSWORD: "{{ rcon_password }}"
+      SERVER_HOSTNAME: "{{ server_hostname }}"
   tasks:
     - name: Run TF2 server Docker container
       docker_container:
         name: tf2-dedicated
-        image: cm2network/tf2
+        image: ghcr.io/melkortf/tf2-base
         state: started
         recreate: yes
         network_mode: host
