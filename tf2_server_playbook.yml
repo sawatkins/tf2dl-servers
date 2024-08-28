@@ -9,8 +9,23 @@
     - name: Download TF2 maps
       ansible.builtin.command: aws s3 sync s3://upfast-tf2-maps/ /home/ec2-user/maps
 
+    - name: Copy api.py to the server
+      ansible.builtin.copy:
+        src: ./api.py
+        dest: /home/ec2-user/api.py
+        mode: '0644'
+
+    # - name: Install pip and required Python packages
+    #   community.docker.docker_container_exec:
+    #     container: tf2-dedicated
+    #     command: |
+    #       wget https://bootstrap.pypa.io/get-pip.py &&
+    #       python3 get-pip.py --user &&
+    #       python3 -m pip install --user fastapi uvicorn &&
+    #       rm get-pip.py
+
     - name: Run TF2 server Docker container
-      docker_container:
+      community.docker.docker_container:
         name: tf2-dedicated
         image: ghcr.io/melkortf/tf2-base
         state: started
@@ -22,9 +37,20 @@
         detach: yes
         volumes:
           - "/home/ec2-user/maps:/home/tf2/server/tf/maps"
+          # - "/home/ec2-user/api.py:/home/tf2/api.py"
+
+    # - name: Run Server info API in the background
+    #   community.docker.docker_container_exec:
+    #     container: tf2-dedicated
+    #     command: bash -c "nohup python3 /home/tf2/api.py > /home/tf2/api.log 2>&1 &"
+    #     detach: yes
+
+    # run the api.py file on the server
+    - name: Run the api.py file on the server
+      command: bash -c "nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &"
 
     - name: Restart TF2 server Docker container
-      docker_container:
+      community.docker.docker_container:
         name: tf2-dedicated
         state: started
         env: "{{ tf2_env }}"
@@ -32,3 +58,6 @@
       tags: 
         - never
         - restart
+
+
+

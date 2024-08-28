@@ -8,7 +8,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return JSONResponse({})
+    return JSONResponse({"message": "hello root"})
 
 @app.get("/server-info")
 async def server_info():
@@ -17,10 +17,10 @@ async def server_info():
     port = os.environ.get('PORT', '')
     rcon_password = os.environ.get('RCON_PASSWORD', '')
 
-    command = f"{server_dir}/rcon -H {ip} -p {port} -P {rcon_password} status"
+    docker_command = f"sudo docker exec tf2-dedicated {server_dir}/rcon -H {ip} -p {port} -P {rcon_password} status"
     
     try:
-        output = subprocess.check_output(command, shell=True, text=True)
+        output = subprocess.check_output(docker_command, shell=True, text=True)
         
         # Parse the output
         public_ip = re.search(r'public IP from Steam: (\d+\.\d+\.\d+\.\d+)', output)
@@ -40,4 +40,5 @@ async def server_info():
 
 if __name__ == "__main__":
     import uvicorn
+    print("Starting API")
     uvicorn.run(app, host="0.0.0.0", port=8000)
