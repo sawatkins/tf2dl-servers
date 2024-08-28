@@ -9,35 +9,19 @@
     - name: Download TF2 maps
       ansible.builtin.command: aws s3 sync s3://upfast-tf2-maps/ /home/ec2-user/maps
 
-    # - name: Run TF2 server Docker container
-    #   docker_container:
-    #     name: tf2-dedicated
-    #     image: ghcr.io/melkortf/tf2-base
-    #     state: started
-    #     recreate: yes
-    #     network_mode: host
-    #     env: "{{ tf2_env }}"
-    #     interactive: yes
-    #     tty: yes
-    #     detach: yes
-    #     volumes:
-    #       - "/home/ec2-user/maps:/home/tf2/server/tf/maps"
-
     - name: Run TF2 server Docker container
-      ansible.builtin.command: >
-        docker run
-        --name tf2-dedicated
-        --network host
-        -e RCON_PASSWORD="{{ rcon_password }}"
-        -e SERVER_HOSTNAME="{{ server_hostname }}"
-        -v /home/ec2-user/maps:/home/tf2/server/tf/maps
-        -it
-        -d
-        --rm
-        ghcr.io/melkortf/tf2-base
-      args:
-        removes: /tmp/tf2-dedicated-container
-      become: yes
+      docker_container:
+        name: tf2-dedicated
+        image: ghcr.io/melkortf/tf2-base
+        state: started
+        recreate: yes
+        network_mode: host
+        env: "{{ tf2_env }}"
+        interactive: yes
+        tty: yes
+        detach: yes
+        volumes:
+          - "/home/ec2-user/maps:/home/tf2/server/tf/maps"
 
     - name: Restart TF2 server Docker container
       docker_container:

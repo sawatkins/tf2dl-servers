@@ -47,7 +47,7 @@ create_server() {
 }
 
 start_server() {
-    ansible-playbook -i hosts.ini tf2_server_playbook.yml
+    ansible-playbook -i hosts.ini tf2_server_playbook.yml 
 }
 
 restart_server() {
