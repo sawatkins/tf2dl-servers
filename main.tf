@@ -8,6 +8,7 @@ resource "aws_instance" "tf2_server" {
   key_name      = "x1-wsl-ubuntu22.04"
 
   vpc_security_group_ids = ["sg-00eb70ad5a661788f"]
+  iam_instance_profile   = "upfast-read-s3"  
 
   root_block_device {
     volume_size = 20
@@ -20,6 +21,8 @@ resource "aws_instance" "tf2_server" {
               sudo yum install -y docker htop
               sudo systemctl start docker
               sudo systemctl enable docker
+              python3 -m ensurepip --upgrade
+              mkdir -p /home/ec2-user/maps
               EOF
 
   tags = {

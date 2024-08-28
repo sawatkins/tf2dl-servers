@@ -5,7 +5,26 @@
     tf2_env:
       RCON_PASSWORD: "{{ rcon_password }}"
       SERVER_HOSTNAME: "{{ server_hostname }}"
-  tasks:
+  pre_tasks:
+    - name: Ensure amazon.aws collection is installed
+      ansible.builtin.pip:
+        name: ansible-galaxy
+        state: present
+      become: yes
+
+    - name: Install amazon.aws collection
+      ansible.builtin.command: ansible-galaxy collection install amazon.aws
+      become: yes
+
+    - name: Download TF2 maps
+      amazon.aws.aws_s3:
+        bucket: "upfast-tf2-maps"
+        object: "*.bsp"
+        dest: "/home/ec2-user/maps"
+        mode: get
+      become: yes
+      become_user: ec2-user
+
     - name: Run TF2 server Docker container
       docker_container:
         name: tf2-dedicated
@@ -17,6 +36,8 @@
         interactive: yes
         tty: yes
         detach: yes
+        volumes:
+          - "/home/ec2-user/maps:/home/tf2/server/tf/maps"
 
     - name: Restart TF2 server Docker container
       docker_container:
@@ -24,4 +45,6 @@
         state: started
         env: "{{ tf2_env }}"
         restart: yes
-      tags: restart
+      tags: 
+        - never
+        - restart

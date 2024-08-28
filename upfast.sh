@@ -34,13 +34,16 @@ create_server() {
         exit 1
     fi
 
-    if ! ansible -i hosts.ini -m ping $public_dns; then
+    sleep 5
+    if ! ansible -i hosts.ini -m ping $public_dns; then #-e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"; then #is this necceary? did i need it before?
         echo "Error: Ansible ping failed. Check server reachability and configuration."
         exit 1
     fi
 
     echo "Server is reachable and configured correctly."
     echo "IP: $public_ip"
+    echo ""
+    echo "Run 'upfast.sh start' to start the server\n"
 }
 
 start_server() {
@@ -69,6 +72,10 @@ connect_to_server() {
 connect_to_container() {
     public_dns=$(get_public_dns)
     ssh -i "$SSH_PRIVATE_KEY_PATH" ec2-user@"$public_dns" -t "sudo docker attach tf2-dedicated"
+}
+
+get_connection_info() {
+    echo "pass"
 }
 
 usage() {
