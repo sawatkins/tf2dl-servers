@@ -22,7 +22,7 @@ resource "aws_instance" "tf2_server" {
               sudo systemctl start docker
               sudo systemctl enable docker
               python3 -m ensurepip --upgrade
-              pip3 install boto3 botocore
+              pip3 install fastapi uvicorn
               mkdir -p /home/ec2-user/maps
               EOF
 
