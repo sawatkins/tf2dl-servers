@@ -35,7 +35,7 @@ create_server() {
     fi
 
     sleep 5
-    if ! ansible -i hosts.ini -m ping $public_dns; then #-e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"; then #is this necceary? did i need it before?
+    if ! ansible -i hosts.ini -m ping $public_dns -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"; then
         echo "Error: Ansible ping failed. Check server reachability and configuration."
         exit 1
     fi

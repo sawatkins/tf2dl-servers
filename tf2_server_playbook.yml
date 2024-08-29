@@ -45,9 +45,16 @@
     #     command: bash -c "nohup python3 /home/tf2/api.py > /home/tf2/api.log 2>&1 &"
     #     detach: yes
 
+    #install docker pip package
+    - name: Install docker pip package
+      ansible.builtin.command: pip3 install docker
+
     # run the api.py file on the server
+    # command: bash -c "nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &"
     - name: Run the api.py file on the server
-      command: bash -c "nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &"
+      ansible.builtin.command: bash -c "nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &"  
+      async: 0
+      poll: 0
 
     - name: Restart TF2 server Docker container
       community.docker.docker_container:
