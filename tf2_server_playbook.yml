@@ -46,13 +46,30 @@
     #     detach: yes
 
     #install docker pip package
-    - name: Install docker pip package
-      ansible.builtin.command: pip3 install docker
+    # - name: Install docker pip package
+    #   ansible.builtin.command: pip3 install docker
 
     # run the api.py file on the server
-    # command: bash -c "nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &"
-    - name: Run the api.py file on the server
-      ansible.builtin.command: bash -c "nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &"  
+    - name: Create virtual environment for API
+      ansible.builtin.command: python3 -m venv /home/ec2-user/api_venv
+      args:
+        creates: /home/ec2-user/api_venv
+
+    - name: Install required packages for API
+      ansible.builtin.pip:
+        name:
+          - docker
+          - fastapi
+          - uvicorn
+        virtualenv: /home/ec2-user/api_venv
+        state: present
+
+    - name: Run the api.py file on the server in virtual environment
+      ansible.builtin.shell: |
+        source /home/ec2-user/api_venv/bin/activate
+        nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &
+      args:
+        executable: /bin/bash
       async: 0
       poll: 0
 

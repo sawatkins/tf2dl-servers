@@ -24,7 +24,6 @@ resource "aws_instance" "tf2_server" {
               sudo usermod -aG docker ec2-user
               newgrp docker
               python3 -m ensurepip --upgrade
-              pip3 install fastapi uvicorn docker
               mkdir -p /home/ec2-user/maps
               EOF
 

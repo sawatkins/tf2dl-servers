@@ -47,7 +47,17 @@ create_server() {
 }
 
 start_server() {
-    ansible-playbook -i hosts.ini tf2_server_playbook.yml 
+    if ansible-playbook -i hosts.ini tf2_server_playbook.yml; then
+        public_ip=$(terraform output -raw instance_public_ip)
+        aws s3 cp s3://upfast-tf2-hosts/servers.txt servers.txt
+        echo "$public_ip" >> servers.txt
+        aws s3 cp servers.txt s3://upfast-tf2-hosts/servers.txt
+        rm servers.txt
+        echo "Server started successfully and IP address added to S3 file."
+    else
+        echo "Error: Failed to start the server."
+        exit 1
+    fi
 }
 
 restart_server() {
@@ -55,9 +65,15 @@ restart_server() {
 }
 
 destroy_server() {
+    public_ip=$(terraform output -raw instance_public_ip)
+
     if terraform destroy; then
+        aws s3 cp s3://upfast-tf2-hosts/servers.txt servers.txt
+        sed -i "/$public_ip/d" servers.txt
+        aws s3 cp servers.txt s3://upfast-tf2-hosts/servers.txt
+        rm servers.txt
         rm hosts.ini
-        echo "Server destroyed and hosts.ini cleared."
+        echo "Server destroyed, IP removed from S3 file, and hosts.ini cleared."
     else
         echo "Error: Failed to destroy server."
         exit 1
