@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <title>upfast.tf</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href=vinu-style.css rel=stylesheet>
+    <meta content="Online video editor with keyframe support and offline mode" name=description>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="title">
+        <img alt="logo" src="rjw.png">
+        <h1>upfast.tf</h1>
+    </div>
+    <div id="subtitle">
+        <p><i>simple tf2 servers</i></p>
+    </div>
+    <div id="server-table">
+        <table>
+            <tr>
+                <th>Region</th>
+                <th>Status</th>
+                <th>Map</th>
+                <th>Players</th>
+                <th>Connect</th>
+            </tr>
+            <tr>
+                <td class="region us">
+                    <img src="us.svg" alt="US flag" class="flag-icon">
+                    <span>US Region</span>
+                </td>
+                <td>Online</td>
+                <td>pl_upward</td>
+                <td>18/24</td>
+                <td><a href="steam://connect/us-east.upfast.tf:27015">Connect</a></td>
+            </tr>
+            <tr>
+                <td class="region eu">
+                    <img src="eu.svg" alt="EU flag" class="flag-icon">
+                    <span>EU Region</span>
+                </td>
+                <td>Online</td>
+                <td>ctf_2fort</td>
+                <td>12/24</td>
+                <td><a href="steam://connect/eu-west.upfast.tf:27015">Connect</a></td>
+            </tr>
+        </table>
+    </div>
+    <div id="mainlist">
+        <a href="#" class="toggle-link" data-target="about-text">about</a>
+        <div id="about-text" class="toggle-text" style="display: none;">
+            <p></p>upfast.tf is a community-driven project offering a free and open-source TF2 server. If you're
+            interested
+            in playing, you can sometimes find it live during weekends.</p>
+        </div>
+        <a href="#" class="toggle-link" data-target="faq-text">faq</a>
+        <div id="faq-text" class="toggle-text" style="display: none;">
+            <p><span style="font-weight: bold;">Q:</span> How do I connect to the server? <br>You can connect to the
+                server using the "Connect" button on the server table.</p>
+        </div>
+    </div>
+    <footer><span>&copy; 2024</span></footer>
+    <script>
+        document.querySelectorAll('.toggle-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                if (targetElement.style.display === 'none') {
+                    targetElement.style.display = 'block';
+                } else {
+                    targetElement.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
