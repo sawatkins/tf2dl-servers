@@ -15,15 +15,6 @@
         dest: /home/ec2-user/api.py
         mode: '0644'
 
-    # - name: Install pip and required Python packages
-    #   community.docker.docker_container_exec:
-    #     container: tf2-dedicated
-    #     command: |
-    #       wget https://bootstrap.pypa.io/get-pip.py &&
-    #       python3 get-pip.py --user &&
-    #       python3 -m pip install --user fastapi uvicorn &&
-    #       rm get-pip.py
-
     - name: Run TF2 server Docker container
       community.docker.docker_container:
         name: tf2-dedicated
@@ -37,19 +28,7 @@
         detach: yes
         volumes:
           - "/home/ec2-user/maps:/home/tf2/server/tf/maps"
-          # - "/home/ec2-user/api.py:/home/tf2/api.py"
 
-    # - name: Run Server info API in the background
-    #   community.docker.docker_container_exec:
-    #     container: tf2-dedicated
-    #     command: bash -c "nohup python3 /home/tf2/api.py > /home/tf2/api.log 2>&1 &"
-    #     detach: yes
-
-    #install docker pip package
-    # - name: Install docker pip package
-    #   ansible.builtin.command: pip3 install docker
-
-    # run the api.py file on the server
     - name: Create virtual environment for API
       ansible.builtin.command: python3 -m venv /home/ec2-user/api_venv
       args:

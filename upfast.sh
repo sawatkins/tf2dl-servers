@@ -50,10 +50,14 @@ start_server() {
     if ansible-playbook -i hosts.ini tf2_server_playbook.yml; then
         public_ip=$(terraform output -raw instance_public_ip)
         aws s3 cp s3://upfast-tf2-hosts/servers.txt servers.txt
-        echo "$public_ip" >> servers.txt
-        aws s3 cp servers.txt s3://upfast-tf2-hosts/servers.txt
+        if ! grep -qF "$public_ip" servers.txt; then
+            echo "$public_ip" >> servers.txt
+            aws s3 cp servers.txt s3://upfast-tf2-hosts/servers.txt
+            echo "Server started successfully and IP address added to S3 file."
+        else
+            echo "Server started successfully. IP address already exists in S3 file."
+        fi
         rm servers.txt
-        echo "Server started successfully and IP address added to S3 file."
     else
         echo "Error: Failed to start the server."
         exit 1

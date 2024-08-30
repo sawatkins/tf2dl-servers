@@ -19,8 +19,8 @@ resource "aws_instance" "tf2_server" {
               #!/bin/bash
               sudo yum update -y
               sudo yum install -y docker htop
-              sudo systemctl start docker
               sudo systemctl enable docker
+              sudo systemctl start docker
               sudo usermod -aG docker ec2-user
               newgrp docker
               python3 -m ensurepip --upgrade
