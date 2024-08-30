@@ -13,6 +13,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
         rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" href="favicon.ico">
+    <link rel="manifest" href="site.webmanifest">
 </head>
 
 <body>
@@ -35,33 +41,23 @@
             <tr>
                 <td class="region us">
                     <img src="us.svg" alt="US flag" class="flag-icon">
-                    <span>US Region</span>
+                    <span>us-west</span>
                 </td>
-                <td>Online</td>
-                <td>pl_upward</td>
-                <td>18/24</td>
-                <td><a href="steam://connect/us-east.upfast.tf:27015">Connect</a></td>
-            </tr>
-            <tr>
-                <td class="region eu">
-                    <img src="eu.svg" alt="EU flag" class="flag-icon">
-                    <span>EU Region</span>
-                </td>
-                <td>Online</td>
-                <td>ctf_2fort</td>
-                <td>12/24</td>
-                <td><a href="steam://connect/eu-west.upfast.tf:27015">Connect</a></td>
+                <td>Offline</td>
+                <td>-</td>
+                <td>0/24</td>
+                <td><a href="">Connect</a></td>
             </tr>
         </table>
     </div>
     <div id="mainlist">
         <a href="#" class="toggle-link" data-target="about-text">about</a>
         <div id="about-text" class="toggle-text" style="display: none;">
-            <p></p>upfast.tf is a community-driven project offering a free and open-source TF2 server. If you're
+            <p>upfast.tf is a project offering free and open-source TF2 server. If you're
             interested
             in playing, you can sometimes find it live during weekends.</p>
         </div>
-        <a href="#" class="toggle-link" data-target="faq-text">faq</a>
+        <a href="#" class="toggle-link" data-target="faq-text">more info</a>
         <div id="faq-text" class="toggle-text" style="display: none;">
             <p><span style="font-weight: bold;">Q:</span> How do I connect to the server? <br>You can connect to the
                 server using the "Connect" button on the server table.</p>
@@ -82,6 +78,7 @@
             });
         });
     </script>
+    <script src="vinu.js"></script>
 </body>
 
 </html>
