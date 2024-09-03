@@ -35,15 +35,14 @@ create_server() {
     fi
 
     sleep 5
-    if ! ansible -i hosts.ini -m ping $public_dns -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"; then
+    if ! ansible -i hosts.ini -m ping "$public_dns" -e "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"; then
         echo "Error: Ansible ping failed. Check server reachability and configuration."
         exit 1
     fi
 
     echo "Server is reachable and configured correctly."
     echo "IP: $public_ip"
-    echo ""
-    echo "Run 'upfast.sh start' to start the server\n"
+    printf "\nRun 'upfast.sh start' to start the server"
 }
 
 start_server() {
