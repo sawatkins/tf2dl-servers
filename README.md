@@ -1,7 +1,11 @@
-# upfast-tf2
+# upfast-tf
 
 https://upfast.tf  
-Scripts, Terraform module, Ansible playbook, and API server for the upfast.tf server hosting website.
+
+Web platform to host and monitor dedicated video game (Team Fortress 2) servers
+
+Uses Terraform and Ansible to provision and configure servers on AWS EC2.
+Monitoring for servers with custon scripts/APIs. 
 
 See website for upfast.tf at https://github.com/sawatkins/upfast-tf2-web
 

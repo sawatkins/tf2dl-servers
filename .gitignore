@@ -6,3 +6,5 @@ terraform.tfstate.backup
 x1*
 hosts.ini
 .DS_Store
+old/
+tmp/

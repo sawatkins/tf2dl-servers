@@ -1,0 +1,267 @@
+div.footer p {
+  color: #bababa;
+  font-size: 9pt;
+  line-height: 1.3em;
+}
+
+div.footer p a {
+  color: #bababa;
+}
+
+div.footer p a:visited {
+  color: #bababa;
+}
+
+a {
+  color: #9eb6dd;
+}
+
+/* #navbar a:hover { */
+  /* background-color: rgba(81, 91, 112, 0.4); */
+  /* background-color: rgba(0, 0, 0, 0.18); */
+/* } */
+
+div#heading {
+  display: flex;
+  margin-top: 18px;
+}
+
+div#title h3 {
+  margin: -5px 0 0 2px;
+  font-weight: 200;
+}
+
+body {
+  background-color: #1a1b1e;
+  /* #374151; */
+  color: #DEDEDE;
+  line-height: 1.4em;
+  width: 45%; 
+  min-width: 850px; 
+  margin: 15px auto;
+  padding: 0 15px;
+  font-family: "Play", sans-serif;
+}
+
+.content-area {
+  padding: 0 15px;
+}
+
+.small-text {
+  color: #bababa;
+  font-size: 0.8rem;
+  line-height: 1.3em;
+}
+
+.flexbox-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.spin {
+  border: 3px solid #556177;
+  border-radius: 50%;
+  border-top: 3px solid #DEDEDE;
+  width: 20px;
+  height: 20px;
+  margin-top: 1rem;
+  -webkit-animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
+  animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  #search-input {
+    max-width: 340px; 
+  }
+
+  .example-searches {
+    flex-direction: column; 
+    gap: 10px; 
+  }
+
+  .flexbox-center {
+    flex-direction: column; 
+    gap: 5px; 
+  }
+
+  .flexbox-center h2 {
+    text-align: center;
+  }
+
+  body {
+    width: 90%; 
+    min-width: 350px; 
+  }
+}
+
+/* server table */
+
+#server-table {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto; /* Add horizontal scroll for small screens */
+  line-height: 1.2em;
+}
+
+#server-table table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  /* font-family: 'Ubuntu', sans-serif; */
+  font-size: 0.9rem;
+  table-layout: auto; /* Change from fixed to auto */
+  border: 1px solid #555; /* Add border around the table */
+  border-radius: 6px; /* Round the corners of the table */
+  overflow: hidden; /* Ensure the border-radius is applied */
+}
+
+#server-table th, #server-table td {
+  padding: 7px 8px; /* Slightly increase padding */
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Adjust this rule for the last column */
+#server-table th:last-child,
+#server-table td:last-child {
+  width: 8%; /* Reduced from 13% to 10% */
+}
+
+#server-table th {
+  font-weight: bold;
+  border-bottom: 1px solid #555;
+  background-color: #2a2b2e; /* Add shading to header */
+}
+
+#server-table td {
+  border-bottom: 1px solid #555;
+}
+
+#server-table tr:nth-child(even) {
+  background-color: #22232626; /* Add subtle shading to even rows */
+}
+
+#server-table tr:hover {
+  background-color: #2a2b2e; /* Add hover effect */
+}
+
+.region {
+  display: flex;
+  align-items: center;
+  width: 100%; /* Use full width of the cell */
+}
+
+.flag-icon {
+  height: 1.2rem;
+  width: auto;
+  margin-right: 0.5em;
+  flex-shrink: 0;
+}
+
+.region span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1; /* Allow the span to take up remaining space */
+}
+
+#how-to-connect {
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 5px;
+  margin-left: 2px;
+}
+
+#connection-steps {
+  display: none;
+}
+
+#refresh {
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 5px;
+  margin-right: 2px;
+}
+
+.create-button {
+  border: 1px solid #9eb6dd;
+  background-color: #9eb6dd;
+  display: inline-block;
+  /* padding: 6px 12px; */
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  color: #1a1b1e;
+}
+
+.create-button:hover {
+  background-color: #8194b3; 
+  /* text-decoration: underline; */
+  color: #1a1b1e;
+}
+
+.spin {
+  border: 3px solid #556177;
+  border-radius: 50%;
+  border-top: 3px solid #DEDEDE;
+  width: 20px;
+  height: 20px;
+  margin-top: 1rem;
+  -webkit-animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
+  animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  #server-table table {
+    font-size: 0.8rem; /* Slightly reduce font size on mobile */
+  }
+
+  #server-table th, #server-table td {
+    padding: 5px 6px; /* Reduce padding on mobile */
+  }
+
+  .flag-icon {
+    height: 1rem; /* Slightly reduce flag size on mobile */
+  }
+
+  /* Hide less important columns on very small screens */
+  @media (max-width: 480px) {
+    #server-table th:nth-child(3),
+    #server-table td:nth-child(3),
+    #server-table th:nth-child(4),
+    #server-table td:nth-child(4) {
+      display: none;
+    }
+  }
+}
