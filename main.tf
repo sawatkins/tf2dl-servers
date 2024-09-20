@@ -5,7 +5,7 @@ provider "aws" {
 resource "aws_instance" "tf2_server" {
   ami           = "ami-0fda60cefceeaa4d3" // Amazon Linux 2 AMI
   instance_type = "t2.micro"
-  key_name      = "x1-wsl-ubuntu22.04"
+  key_name      = "upfast-vultr"
 
   vpc_security_group_ids = ["sg-00eb70ad5a661788f"]
   iam_instance_profile   = "upfast-read-s3"  
