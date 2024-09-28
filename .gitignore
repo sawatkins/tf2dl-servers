@@ -9,3 +9,4 @@ hosts.ini
 old/
 tmp/
 main
+.air.toml

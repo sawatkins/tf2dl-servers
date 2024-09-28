@@ -124,7 +124,7 @@ body {
   font-size: 0.9rem;
   table-layout: auto; /* Change from fixed to auto */
   border: 1px solid #555; /* Add border around the table */
-  border-radius: 6px; /* Round the corners of the table */
+  border-radius: 4px; /* Round the corners of the table */
   overflow: hidden; /* Ensure the border-radius is applied */
 }
 
