@@ -1,0 +1,3 @@
+region="us-west-1"
+instance_type="t2.micro"
+SERVER_HOSTNAME="surf 24/7 - upfast.tf"
