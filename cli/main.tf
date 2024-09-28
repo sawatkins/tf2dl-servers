@@ -1,14 +1,36 @@
+variable "region" {
+  type = string
+  default = "us-west-1"
+}
+
+variable "instance_type" {
+  type = string
+  default = "t2.micro"
+}
+
+variable "key_name" {
+  type = string
+}
+
+variable "security_group_id" {
+  type = string
+}
+
+variable "iam_instance_profile" {
+  type = string
+}
+
 provider "aws" {
-  region = "us-west-1"
+  region = var.region
 }
 
 resource "aws_instance" "tf2_server" {
   ami           = "ami-0fda60cefceeaa4d3" // Amazon Linux 2 AMI
-  instance_type = "t2.micro"
-  key_name      = "upfast-vultr"
+  instance_type = var.instance_type
+  key_name      = var.key_name
 
-  vpc_security_group_ids = ["sg-00eb70ad5a661788f"]
-  iam_instance_profile   = "upfast-read-s3"  
+  vpc_security_group_ids = [var.security_group_id]
+  iam_instance_profile   = var.iam_instance_profile
 
   root_block_device {
     volume_size = 20
