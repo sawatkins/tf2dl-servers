@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import subprocess
 import os
@@ -22,12 +24,19 @@ def read_current_servers_file():
             return json.load(f)
     else:
         return {}
-
-def create_server():
-    # server_config_filename = get_server_config_filename()
-    # server_config = read_server_config_file(server_config_name)
     
-    # create server with terraform
+def update_ansible_inventory():
+    with open("./inventory.ini", "w") as f:
+        f.write("[tf2_server]\n")
+        for _, server_info in read_current_servers_file().items():
+            f.write(f"{server_info['public_dns']} server_hostname={server_info['server_hostname']}\n")
+        f.write("[tf2_server:vars]\n")
+        f.write("ansible_user=ec2-user\n")
+        f.write(f"ansible_ssh_private_key_file={os.getenv('SSH_PRIVATE_KEY_PATH')}\n")
+        f.write(f"rcon_password={os.getenv('RCON_PASSWORD')}\n")
+
+# create_server creates a all servers with terraform
+def create_server():
     try:
         subprocess.run([
             "terraform", "apply",
@@ -42,6 +51,8 @@ def create_server():
         "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_id"]).decode().strip(),
         "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_ip"]).decode().strip(),
         "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_dns"]).decode().strip(),
+        "name": "tf2_server_jump_01",
+        "server_hostname": "jump 24/7 - upfast.tf"
     }
     write_server_to_curent_servers_file(tf2_server_jump_01)
     
@@ -49,8 +60,12 @@ def create_server():
         "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_surf_01_id"]).decode().strip(),
         "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_surf_01_public_ip"]).decode().strip(),
         "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_surf_01_public_dns"]).decode().strip(),
+        "name": "tf2_server_surf_01",
+        "server_hostname": "surf 24/7 - upfast.tf"
     }
     write_server_to_curent_servers_file(tf2_server_surf_01)
+    
+    update_ansible_inventory()
     
 def print_current_servers():
     current_servers = read_current_servers_file()
@@ -62,7 +77,9 @@ def print_current_servers():
         print(f"Instance ID: {instance_id}")
         print(f"  Public IP: {server_info['public_ip']}")
         print(f"  Public DNS: {server_info['public_dns']}")
-        print()
+        print(f"  Name: {server_info['name']}")
+        print(f"  Server Hostname: {server_info['server_hostname']}")
+        print("")
         
 def destroy_server():
     pass
@@ -101,12 +118,17 @@ def check_dependencies():
 def main():
     check_dependencies()
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    
+    # read .env file
+    with open(".env", "r") as f:
+        for line in f:
+            key, value = line.strip().split("=")
+            os.environ[key] = value
 
     parser = argparse.ArgumentParser(description="manage upfast.tf servers")
     parser.add_argument("command", choices=["create", "destroy", "list"], help="command to execute")
 
     args = parser.parse_args()
-
     if args.command == "create":
         create_server()
     elif args.command == "destroy":

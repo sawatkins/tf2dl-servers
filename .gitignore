@@ -13,3 +13,4 @@ main
 base.toml
 *.tfvars
 current-servers.json
+upfast-generated.py

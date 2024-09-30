@@ -1,4 +1,4 @@
-- name: Configure TF2 Server
+- name: Configure upfast tf2 servers
   hosts: tf2_server
   become: yes
   vars:
