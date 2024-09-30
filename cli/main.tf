@@ -7,7 +7,6 @@ module "tf2_server_jump_01" {
   key_name             = var.key_name
   security_group_id    = var.security_group_id
   iam_instance_profile = var.iam_instance_profile
-  server_hostname      = var.server_hostname
 }
 
 module "tf2_server_surf_01" {
@@ -18,7 +17,6 @@ module "tf2_server_surf_01" {
   key_name             = var.key_name
   security_group_id    = var.security_group_id
   iam_instance_profile = var.iam_instance_profile
-  server_hostname      = var.server_hostname
 }
 
 

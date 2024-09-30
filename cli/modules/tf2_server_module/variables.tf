@@ -23,7 +23,4 @@ variable "iam_instance_profile" {
   description = "AWS IAM instance profile for the ec2 instances"
 }
 
-variable "server_hostname" {
-  type = string
-  description = "The hostname of the server"
-}
+

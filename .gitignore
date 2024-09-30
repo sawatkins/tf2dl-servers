@@ -12,3 +12,4 @@ main
 .air.toml
 base.toml
 *.tfvars
+current-servers.json

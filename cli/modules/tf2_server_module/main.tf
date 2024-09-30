@@ -28,7 +28,7 @@ resource "aws_instance" "tf2_server" {
               EOF
 
   tags = {
-    Name = var.server_hostname
+    Name = "upfast-tf2-server"
   }
 }
 
