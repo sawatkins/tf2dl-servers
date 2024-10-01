@@ -100,31 +100,10 @@ def print_current_servers():
         print("")
         
 def destroy_server():
-    pass
-    # current_servers = read_current_servers_file()
-    # if not current_servers:
-    #     print("No servers to destroy.")
-    #     return
+    # for now, delete all
+    subprocess.run(["terraform", "destroy", "-var-file", f"./upfast.tfvars"], check=True)
     
-    # print_current_servers()
-    # server_id_to_destroy = input("Enter instance id of server to destroy: ")
-    # if server_id_to_destroy not in current_servers:
-    #     print(f"Error: Server '{server_id_to_destroy}' not found.")
-    #     sys.exit(1)
-
-    # # destroy server with terraform
-    # try:
-    #     subprocess.run([
-    #         "terraform", "destroy",
-    #         "-var", f"instance_id={server_id_to_destroy}"
-    #     ], check=True)
-    # except subprocess.CalledProcessError as e:
-    #     print(f"Error: Terraform destroy failed with exit code {e.returncode}")
-    #     sys.exit(1)
-    
-    # # remove server info from current-servers.json
-    # del current_servers[server_id_to_destroy]
-    # # write_current_servers_(current_servers)
+    os.remove("./current-servers.json")
 
 def check_dependencies():
     required_programs = ["aws", "ansible", "terraform"]
