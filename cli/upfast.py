@@ -6,6 +6,7 @@ import os
 import sys
 import shutil
 import json
+import time
 
 
 def write_server_to_curent_servers_file(new_server):
@@ -13,6 +14,8 @@ def write_server_to_curent_servers_file(new_server):
     current_servers[new_server["instance_id"]] = {
         "public_ip": new_server["public_ip"],
         "public_dns": new_server["public_dns"],
+        "name": new_server["name"],
+        "server_hostname": new_server["server_hostname"]
     }
 
     with open("./current-servers.json", "w") as f:
@@ -29,7 +32,7 @@ def update_ansible_inventory():
     with open("./inventory.ini", "w") as f:
         f.write("[tf2_server]\n")
         for _, server_info in read_current_servers_file().items():
-            f.write(f"{server_info['public_dns']} server_hostname={server_info['server_hostname']}\n")
+            f.write(f"{server_info['public_dns']} server_hostname='{server_info['server_hostname']}'\n")
         f.write("[tf2_server:vars]\n")
         f.write("ansible_user=ec2-user\n")
         f.write(f"ansible_ssh_private_key_file={os.getenv('SSH_PRIVATE_KEY_PATH')}\n")
@@ -65,7 +68,22 @@ def create_server():
     }
     write_server_to_curent_servers_file(tf2_server_surf_01)
     
+    print("updating ansible inventory")
     update_ansible_inventory()
+    
+    time.sleep(5)
+    
+    print("running ansible playbook")
+    try:
+        subprocess.run([
+            "ansible-playbook",
+            "tf2_server_playbook.yml",
+            "-i", "./inventory.ini",
+            "-e", "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
+        ], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: Ansible playbook failed with exit code {e.returncode}")
+        sys.exit(1)
     
 def print_current_servers():
     current_servers = read_current_servers_file()

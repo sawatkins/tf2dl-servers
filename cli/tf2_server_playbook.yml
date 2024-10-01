@@ -7,12 +7,12 @@
       SERVER_HOSTNAME: "{{ server_hostname }}"
   tasks:
     - name: Download TF2 maps
-      ansible.builtin.command: aws s3 sync s3://upfast-tf2-maps/ /home/ec2-user/maps
+      ansible.builtin.command: aws s3 sync s3://upfast-tf2-maps-lite/ /home/ec2-user/maps
 
     - name: Copy api.py to the server
       ansible.builtin.copy:
-        src: ./api.py
-        dest: /home/ec2-user/api.py
+        src: ./metrics-api.py
+        dest: /home/ec2-user/metrics-api.py
         mode: '0644'
 
     - name: Run TF2 server Docker container
@@ -29,12 +29,12 @@
         volumes:
           - "/home/ec2-user/maps:/home/tf2/server/tf/maps"
 
-    - name: Create virtual environment for API
+    - name: Create virtual environment for metrics API
       ansible.builtin.command: python3 -m venv /home/ec2-user/api_venv
       args:
         creates: /home/ec2-user/api_venv
 
-    - name: Install required packages for API
+    - name: Install required packages for metricsAPI
       ansible.builtin.pip:
         name:
           - docker
@@ -43,10 +43,10 @@
         virtualenv: /home/ec2-user/api_venv
         state: present
 
-    - name: Run the api.py file on the server in virtual environment
+    - name: Run the metrics-api.py file on the server in virtual environment
       ansible.builtin.shell: |
         source /home/ec2-user/api_venv/bin/activate
-        nohup python3 /home/ec2-user/api.py > /home/ec2-user/api.log 2>&1 &
+        nohup python3 /home/ec2-user/metrics-api.py > /home/ec2-user/api.log 2>&1 &
       args:
         executable: /bin/bash
       async: 0
