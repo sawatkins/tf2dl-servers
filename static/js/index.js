@@ -1,12 +1,14 @@
 // Configuration
-const API_ENDPOINT = '/api/server-ips';
-const POLL_INTERVAL = 60000; // 1 minute
+const API_ENDPOINT = 'https://bwdfgz2pbedm7ficoxqxbhfazi0ynfoh.lambda-url.us-west-1.on.aws';
+const POLL_INTERVAL = 30000; // 30 seconds
 
 // Function to fetch server IPs
 async function fetchServerIPs() {
     try {
         const response = await fetch(API_ENDPOINT);
-        return await response.json();
+        const ips = await response.json();
+        console.log("ips", ips);
+        return ips;
     } catch (error) {
         console.error('Error fetching server IPs:', error);
         return [];
@@ -16,7 +18,7 @@ async function fetchServerIPs() {
 // Function to fetch server info
 async function fetchServerInfo(ip) {
     try {
-        const response = await fetch(`/api/server-info?ip=${ip}`);
+        const response = await fetch(`http://${ip}:8000/server-info`);
         return await response.json();
     } catch (error) {
         console.error(`Error fetching server info for ${ip}:`, error);
@@ -35,14 +37,14 @@ function updateTableRow(serverInfo) {
         tableBody.appendChild(row);
     }
 
-    // console.log("serverInfo", serverInfo);
+    console.log("serverInfo", serverInfo);
 
     // Always set the region to "us-west" for now until more regions are supported
     const region = "us-west";
 
     row.innerHTML = `
         <td class="region ${region}">
-            <img src="${region}.svg" alt="${region} flag" class="flag-icon">
+            <img src="/img/${region}.svg" alt="${region} flag" class="flag-icon">
             <span>${region}</span>
         </td>
         <td>Online</td>

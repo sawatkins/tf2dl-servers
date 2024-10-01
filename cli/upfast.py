@@ -102,7 +102,7 @@ def print_current_servers():
 def destroy_server():
     # for now, delete all
     subprocess.run(["terraform", "destroy", "-var-file", f"./upfast.tfvars"], check=True)
-    
+    os.remove("./inventory.ini")
     os.remove("./current-servers.json")
 
 def check_dependencies():

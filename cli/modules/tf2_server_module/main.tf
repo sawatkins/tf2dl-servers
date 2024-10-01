@@ -23,6 +23,7 @@ resource "aws_instance" "tf2_server" {
               sudo systemctl start docker
               sudo usermod -aG docker ec2-user
               newgrp docker
+              docker pull ghcr.io/melkortf/tf2-base
               python3 -m ensurepip --upgrade
               mkdir -p /home/ec2-user/maps
               EOF
