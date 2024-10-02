@@ -1,6 +1,6 @@
 // Configuration
 const API_ENDPOINT = 'https://bwdfgz2pbedm7ficoxqxbhfazi0ynfoh.lambda-url.us-west-1.on.aws';
-const POLL_INTERVAL = 30000; // 30 seconds
+const POLL_INTERVAL = 60000; // 60 seconds
 
 // Function to fetch server IPs
 async function fetchServerIPs() {
@@ -18,8 +18,10 @@ async function fetchServerIPs() {
 // Function to fetch server info
 async function fetchServerInfo(ip) {
     try {
-        const response = await fetch(`http://${ip}:8000/server-info`);
-        return await response.json();
+        const response = await fetch(`/api/server-info?ip=${ip}`);
+        const serverInfo = await response.json();
+        // console.log("serverInfo", serverInfo);
+        return serverInfo;
     } catch (error) {
         console.error(`Error fetching server info for ${ip}:`, error);
         return null;

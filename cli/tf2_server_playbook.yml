@@ -9,16 +9,24 @@
     - name: Download TF2 maps
       ansible.builtin.command: aws s3 sync s3://upfast-tf2-maps-lite/ /home/ec2-user/maps
 
-    - name: Copy api.py to the server
-      ansible.builtin.copy:
-        src: ./metrics-api.py
-        dest: /home/ec2-user/metrics-api.py
-        mode: '0644'
+    # - name: Copy modified Dockerfile to the server
+    #   ansible.builtin.copy:
+    #     src: "{{ dockerfile_src }}"
+    #     dest: /home/ec2-user/Dockerfile
+    #     mode: '0644'
+    
+    # - name: Build docker image
+    #   community.docker.docker_image:
+    #     name: tf2-base-modified
+    #     tag: latest
+    #     source: build
+    #     build:
+    #       path: /home/ec2-user
 
     - name: Run TF2 server Docker container
       community.docker.docker_container:
         name: tf2-dedicated
-        image: ghcr.io/melkortf/tf2-base
+        image: ghcr.io/melkortf/tf2-base:latest
         state: started
         recreate: yes
         network_mode: host
@@ -28,6 +36,12 @@
         detach: yes
         volumes:
           - "/home/ec2-user/maps:/home/tf2/server/tf/maps"
+
+    - name: Copy metrics-api.py to the server
+      ansible.builtin.copy:
+        src: ./metrics-api.py
+        dest: /home/ec2-user/metrics-api.py
+        mode: '0644'
 
     - name: Create virtual environment for metrics API
       ansible.builtin.command: python3 -m venv /home/ec2-user/api_venv
