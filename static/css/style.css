@@ -16,10 +16,11 @@ a {
   color: #9eb6dd;
 }
 
-/* #navbar a:hover { */
+a:hover {
+  color: #879bbd;
   /* background-color: rgba(81, 91, 112, 0.4); */
   /* background-color: rgba(0, 0, 0, 0.18); */
-/* } */
+}
 
 div#heading {
   display: flex;
@@ -32,12 +33,12 @@ div#title h3 {
 }
 
 body {
-  background-color: #1a1b1e;
-  /* #374151; */
+  background-color: #1a1b1e; /* #374151; */
   color: #DEDEDE;
   line-height: 1.4em;
   width: 45%; 
   min-width: 850px; 
+  max-width: 1000px; /* Added max-width */
   margin: 15px auto;
   padding: 0 15px;
   font-family: "Play", sans-serif;
@@ -62,114 +63,72 @@ body {
 
 .spin {
   border: 3px solid #556177;
+  border-top-color: #DEDEDE;
   border-radius: 50%;
-  border-top: 3px solid #DEDEDE;
   width: 20px;
   height: 20px;
   margin-top: 1rem;
-  -webkit-animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
   animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
 }
 
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
-@media (max-width: 768px) {
-  #search-input {
-    max-width: 340px; 
-  }
-
-  .example-searches {
-    flex-direction: column; 
-    gap: 10px; 
-  }
-
-  .flexbox-center {
-    flex-direction: column; 
-    gap: 5px; 
-  }
-
-  .flexbox-center h2 {
-    text-align: center;
-  }
-
-  body {
-    width: 90%; 
-    min-width: 350px; 
-  }
-}
-
-/* server table */
-
+/* Server table styles */
 #server-table {
   margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  overflow-x: auto; /* Add horizontal scroll for small screens */
+  overflow-x: auto;
   line-height: 1.2em;
 }
 
 #server-table table {
+  width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  width: 100%;
-  /* font-family: 'Ubuntu', sans-serif; */
   font-size: 0.9rem;
-  table-layout: auto; /* Change from fixed to auto */
-  border: 1px solid #555; /* Add border around the table */
-  border-radius: 4px; /* Round the corners of the table */
-  overflow: hidden; /* Ensure the border-radius is applied */
+  border: 1px solid #555;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 #server-table th, #server-table td {
-  padding: 7px 8px; /* Slightly increase padding */
-  text-align: left;
+  padding: 7px 8px;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 20%; /* Equal width for all columns */
 }
 
-/* Adjust this rule for the last column */
-#server-table th:last-child,
-#server-table td:last-child {
-  width: 8%; /* Reduced from 13% to 10% */
+#server-table td.region {
+  width: auto; /* Allow the region td to take up necessary space */
 }
 
 #server-table th {
   font-weight: bold;
-  border-bottom: 1px solid #555;
-  background-color: #2a2b2e; /* Add shading to header */
-}
-
-#server-table td {
+  background-color: #2a2b2e;
   border-bottom: 1px solid #555;
 }
 
-#server-table tr:nth-child(even) {
-  background-color: #22232626; /* Add subtle shading to even rows */
-}
+#server-table td { border-bottom: 1px solid #555; }
 
-#server-table tr:hover {
-  background-color: #2a2b2e; /* Add hover effect */
-}
+#server-table tr:nth-child(even) { background-color: #22232626; }
+#server-table tr:hover { background-color: #2a2b2e; }
+#server-table tr:last-child td { border-bottom: none; }
 
 .region {
   display: flex;
   align-items: center;
-  width: 100%; /* Use full width of the cell */
+  justify-content: center; /* Center the content horizontally */
+  width: 100%; /* Ensure it takes full width */
+  text-align: center; /* Center text within the flexbox */
+  gap: 0.5em; /* Add gap between flag-icon and text */
 }
 
 .flag-icon {
   height: 1.2rem;
   width: auto;
-  margin-right: 0.5em;
   flex-shrink: 0;
 }
 
@@ -177,91 +136,56 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1; /* Allow the span to take up remaining space */
 }
 
-#how-to-connect {
+.copy-icon {
+  cursor: pointer;
+  /* margin-left: 5px; */
+}
+
+#how-to-connect, #refresh {
   cursor: pointer;
   text-decoration: underline;
   margin-top: 5px;
   margin-left: 2px;
 }
 
-#connection-steps {
-  display: none;
-}
-
-#refresh {
-  cursor: pointer;
-  text-decoration: underline;
-  margin-top: 5px;
-  margin-right: 2px;
-}
-
 .create-button {
   border: 1px solid #9eb6dd;
   background-color: #9eb6dd;
-  display: inline-block;
-  /* padding: 6px 12px; */
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding: 3px 24px;
   border-radius: 6px;
+  cursor: pointer;
   font-family: inherit;
   font-size: inherit;
-  cursor: pointer;
   color: #1a1b1e;
 }
 
 .create-button:hover {
-  background-color: #8194b3; 
-  /* text-decoration: underline; */
-  color: #1a1b1e;
+  background-color: #8194b3;
 }
 
-.spin {
-  border: 3px solid #556177;
-  border-radius: 50%;
-  border-top: 3px solid #DEDEDE;
-  width: 20px;
-  height: 20px;
-  margin-top: 1rem;
-  -webkit-animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
-  animation: spin 0.43s cubic-bezier(.7,.05,.4,.88) infinite;
+#go-to-desktop-to-connect {
+  display: none;
 }
 
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Media query for mobile responsiveness */
 @media (max-width: 768px) {
-  #server-table table {
-    font-size: 0.8rem; /* Slightly reduce font size on mobile */
+  body {
+    width: 90%;
+    min-width: 350px;
   }
 
-  #server-table th, #server-table td {
-    padding: 5px 6px; /* Reduce padding on mobile */
-  }
+  #server-table table { font-size: 0.8rem; }
+  #server-table th, #server-table td { padding: 5px 6px; }
+  .flag-icon { height: 1rem; }
+}
 
-  .flag-icon {
-    height: 1rem; /* Slightly reduce flag size on mobile */
+@media (max-width: 480px) {
+  #go-to-desktop-to-connect {
+    display: block;
   }
-
-  /* Hide less important columns on very small screens */
-  @media (max-width: 480px) {
-    #server-table th:nth-child(3),
-    #server-table td:nth-child(3),
-    #server-table th:nth-child(4),
-    #server-table td:nth-child(4) {
-      display: none;
-    }
+  #server-table th:nth-child(5),
+  #server-table td:nth-child(5) {
+    display: none;
   }
 }

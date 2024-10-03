@@ -52,8 +52,20 @@ function updateTableRow(serverInfo) {
         <td>Online</td>
         <td>${serverInfo.map}</td>
         <td>${serverInfo.players}/${serverInfo.max_players}</td>
-        <td><a href="steam://connect/${serverInfo.public_ip}:27015">Connect</a></td>
+        <td>
+            <a href="steam://connect/${serverInfo.public_ip}:27015">Connect</a>
+            <span class="copy-icon" title="Copy ${serverInfo.public_ip}" onclick="copyToClipboard(this, '${serverInfo.public_ip}')">
+                <img src="/img/copy.svg" alt="Copy ${serverInfo.public_ip}" style="width: 16px; height: 16px; vertical-align: middle;">
+            </span>
+        </td>
     `;
+}
+
+// Function to copy IP to clipboard
+function copyToClipboard(element, ip) {
+    navigator.clipboard.writeText(ip).catch(err => {
+        console.error('Failed to copy IP: ', err);
+    });
 }
 
 // Function to display refreshing state
@@ -105,7 +117,7 @@ async function pollServers() {
 
 // Start polling
 setInterval(pollServers, POLL_INTERVAL);
-pollServers(); // Initial poll
+pollServers();
 
 // Add event listener for manual refresh
 document.addEventListener('DOMContentLoaded', function() {

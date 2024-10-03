@@ -1,4 +1,4 @@
-module github.com/sawatkins/upfast-tf2-web
+module github.com/sawatkins/upfast-tf
 
 go 1.21.0
 

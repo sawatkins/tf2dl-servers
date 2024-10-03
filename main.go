@@ -8,15 +8,13 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html/v2"
 
-	"github.com/sawatkins/upfast-tf2-web/handlers"
+	"github.com/sawatkins/upfast-tf/handlers"
 )
 
 func main() {
 	port := flag.String("port", ":8080", "Port to listen on")
-	prefork := flag.Bool("prefork", false, "Enable prefork in Production")
 	dev := flag.Bool("dev", true, "Enable development mode")
 	flag.Parse()
-
 
 	engine := html.New("./templates", ".html")
 	if *dev {
@@ -25,7 +23,6 @@ func main() {
 	}
 
 	app := fiber.New(fiber.Config{
-		Prefork: *prefork,
 		Views:   engine,
 	})
 
