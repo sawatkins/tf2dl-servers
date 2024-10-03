@@ -7,7 +7,7 @@ async function fetchServerIPs() {
     try {
         const response = await fetch(API_ENDPOINT);
         const ips = await response.json();
-        console.log("ips", ips);
+        // console.log("ips", ips);
         return ips;
     } catch (error) {
         console.error('Error fetching server IPs:', error);
@@ -39,7 +39,7 @@ function updateTableRow(serverInfo) {
         tableBody.appendChild(row);
     }
 
-    console.log("serverInfo", serverInfo);
+    // console.log("serverInfo", serverInfo);
 
     // Always set the region to "us-west" for now until more regions are supported
     const region = "us-west";
@@ -49,7 +49,7 @@ function updateTableRow(serverInfo) {
             <img src="/img/${region}.svg" alt="${region} flag" class="flag-icon">
             <span>${region}</span>
         </td>
-        <td>Online</td>
+        <td class="online-status">Online</td>
         <td>${serverInfo.map}</td>
         <td>${serverInfo.players}/${serverInfo.max_players}</td>
         <td>
@@ -88,8 +88,12 @@ function setReadyState() {
 async function pollServers() {
     console.log("polling servers...");
     setRefreshingState();
-    const ips = await fetchServerIPs();
-    
+
+    const ips = await Promise.race([
+        fetchServerIPs(),
+        new Promise(resolve => setTimeout(() => resolve([]), 5000)) // 5 seconds timeout
+    ]);
+
     const headerRow = document.querySelector('#header-row');
     const defaultRow = document.querySelector('#default-row');
     const table = document.querySelector('#server-table table');

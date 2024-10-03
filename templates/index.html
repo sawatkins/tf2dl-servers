@@ -1,76 +1,81 @@
 {{template "partials/navbar" .}}
 
-<div class="flexbox-center">
-    <img src="/img/rjw.png" alt="" width="45px" style="border-radius: 15%;">
-    <h2 style="font-weight: 400;">Welcome to upfast.tf!</h2>
-</div>
+<div class="index-page">
+    <div class="flexbox-center">
+        <img src="/img/rjw.png" alt="" width="45px" style="border-radius: 15%;">
+        <h2 style="font-weight: 400;">Welcome to upfast.tf!</h2>
+    </div>
 
-<div style="text-align: center; font-style: italic; color: #bababa;">
-    <p>upfast.tf hosts free public Team Fortress 2 servers. <br> Feel free to connect and play!</p>
-</div>
+    <div style="text-align: center; font-style: italic; color: #bababa;">
+        <p>upfast.tf hosts free public Team Fortress 2 servers<br>Feel free to connect and play!</p>
+    </div>
 
-<div class="content-area"><strong>Public servers:</strong></div>
-<div id="go-to-desktop-to-connect" class="content-area small-text" style="font-style: italic; padding-top: 10px;">
-    Go to desktop site to connect
-</div>
-<div id="server-table" class="content-area">
-    <table>
-        <tr id="header-row">
-            <th>Region</th>
-            <th>Status</th>
-            <th>Map</th>
-            <th>Players</th>
-            <th>Connect</th>
-        </tr>
-        <tr id="default-row" style="display: none;">
-            <td class="region us">
-                <img src="/img/us-west.svg" alt="US flag" class="flag-icon">
-                <span>us-west</span>
-            </td>
-            <td>Offline</td>
-            <td>-</td>
-            <td>0/24</td>
-            <td><a href="">Connect</a></td>
-        </tr>
-    </table>
+    <div class="content-area section-title"><strong>Public servers:</strong></div>
+    <div id="go-to-desktop-to-connect" class="content-area small-text" style="font-style: italic;">
+        Go to desktop site to connect
+    </div>
+    <div id="server-table" class="content-area">
+        <table>
+            <tr id="header-row">
+                <th>Region</th>
+                <th>Status</th>
+                <th>Map</th>
+                <th>Players</th>
+                <th>Connect</th>
+            </tr>
+            <tr id="default-row" style="display: none;">
+                <td class="region us">
+                    <img src="/img/us-west.svg" alt="US flag" class="flag-icon">
+                    <span>us-west</span>
+                </td>
+                <td>Offline</td>
+                <td>-</td>
+                <td>0/24</td>
+                <td><a href="">Connect</a></td>
+            </tr>
+        </table>
 
-</div>
+    </div>
 
-<div class="content-area small-text" style="display: flex; justify-content: space-between; align-items: center;">
-    <span id="how-to-connect">How to connect</span>
-    <span id="refresh">Manual refresh</span>
-</div>
-<div class="content-area small-text" id="connection-steps" style="display: none;">
-    <p><span style="font-weight: bold;">How do I connect to the server?</span><br>You can click the "Connect" button on
-        the server table.<br>You can also open the console in-game and type
-        <code>connect ip:27015</code>
-    </p>
-</div>
-<br>
-<div class="content-area" style="text-align: center; margin-bottom: 10px;">
-    <strong>Create your own server:</strong>
-</div>
-<div class="content-area flexbox-center">
-    <button class="create-button" style="cursor: not-allowed;">Coming soon</button>
-</div>
+    <div class="content-area small-text" style="display: flex; justify-content: space-between; align-items: center;">
+        <span id="how-to-connect">How to connect</span>
+        <span id="refresh">Manual refresh</span>
+    </div>
+    <div class="content-area small-text" id="connection-steps" style="display: none;">
+        <p><span style="font-weight: bold;">How do I connect to the server?</span><br>You can click the "Connect" button
+            on
+            the server table.<br>You can also open the console in-game and type
+            <code style="background-color: #2f2f2f; border-radius: 4px; padding: 1px;">connect &lt;ip&gt;</code>
+        </p>
+    </div>
 
-<br>
+    <div id="create-server-section" style="display: none;">
+        <br>
+        <div class="content-area" style="text-align: center; margin-bottom: 10px;">
+            <strong>Create your own server:</strong>
+        </div>
+        <div class="content-area flexbox-center">
+            <button class="create-button" style="cursor: not-allowed;">Coming soon</button>
+        </div>
+    </div>
+    <br>
 
-<script src="/js/index.js"></script>
+    <script src="/js/index.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const howToConnect = document.getElementById('how-to-connect');
-        const connectionSteps = document.getElementById('connection-steps');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const howToConnect = document.getElementById('how-to-connect');
+            const connectionSteps = document.getElementById('connection-steps');
 
-        howToConnect.addEventListener('click', function () {
-            if (connectionSteps.style.display === 'none') {
-                connectionSteps.style.display = 'block';
-            } else {
-                connectionSteps.style.display = 'none';
-            }
+            howToConnect.addEventListener('click', function () {
+                if (connectionSteps.style.display === 'none') {
+                    connectionSteps.style.display = 'block';
+                } else {
+                    connectionSteps.style.display = 'none';
+                }
+            });
         });
-    });
-</script>
+    </script>
+</div>
 
 {{template "partials/footer" .}}

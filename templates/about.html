@@ -1,35 +1,45 @@
 {{template "partials/navbar" .}}
 
-<strong id="about">About</strong>
-<div class="content-area">
-    <p>Welcome! upfast.tf is a personal project offering free public <a
-            href="https://store.steampowered.com/app/440/Team_Fortress_2/" target="_blank"
-            rel="noopener noreferrer">Team Fortress 2</a> servers for anyone to play on.</p>
-    <p>Servers are hosted on AWS EC2 instances created with Terraform and configured with Ansible.</p>
-    <p>Feel free to join and play if you're interested.</p>
-</div>
+<div class="about-page">
+    <p class="section-title"><strong>About</strong></p>
+    <div class="content-area limited-width">
+        <p>Welcome! upfast.tf is a web platform that hosts free public
+            <a href="https://en.wikipedia.org/wiki/Team_Fortress_2" target="_blank"
+                rel="noopener noreferrer">Team Fortress 2</a>
+            servers for anyone to play on. Feel free to join and play if you're
+            interested.
+        </p>
+        <p>It is a personal project of mine. Servers are hosted on AWS EC2
+            instances created with Terraform and configured with Ansible.</p>
+    </div>
 
-<strong id="feedback">Future Plans</strong>
-<div class="content-area">
-    <p>My future plans for this site are to allow anyone to create and use servers for free.</p>
-</div>
-<strong id="feedback">Feedback & Contact</strong>
-<div class="content-area">
-    <p>Email me <a id="email" href="mailto:simon@upfast.tf">here</a>.</p>
-</div>
+    <p class="section-title"><strong>Future Plans</strong></p>
+    <div class="content-area limited-width">
+        <p>
+            &bull;  Use Prometheus to monitor server stats & create a status page<br>
+            &bull;  Track stats for total connections to each server<br>
+            &bull;  Allow anyone to create their own server<br>
+        </p>
+    </div>
 
-<strong id="privacy">Privacy</strong>
-<div class="content-area">
-    <p>upfast.tf does not collect any personal information from its users.</p>
-</div>
+    <p class="section-title"><strong>Contact</strong></p>
+    <div class="content-area limited-width">
+        <p>Email me for ban reports, server issues, or anything else <a href="mailto:simon@upfast.tf">here</a>.
+        </p>
+    </div>
 
-<strong id="attribution">Attribution:</strong>
-<div class="content-area">
-    <p>Soldier Art by VirtuaWave (<a href="https://www.youtube.com/watch?v=MrS7bezmsdk" target="_blank"
-            rel="noopener noreferrer">yt</a>,
-        <a href="https://gamedev-neoncity.tumblr.com/" target="_blank" rel="noopener noreferrer">tumblr</a>)
-    </p>
-</div>
+    <p class="section-title"><strong>Privacy</strong></p>
+    <div class="content-area limited-width">
+        <p>upfast.tf does not collect any personal information, store cookies, or use tracking.</p>
+    </div>
 
+    <p class="section-title"><strong>Attribution</strong></p>
+    <div class="content-area limited-width">
+        <p>Soldier Art by VirtuaWave
+            (<a href="https://www.youtube.com/watch?v=MrS7bezmsdk" target="_blank" rel="noopener noreferrer">yt</a>,
+            <a href="https://gamedev-neoncity.tumblr.com/" target="_blank" rel="noopener noreferrer">tumblr</a>)
+        </p>
+    </div>
+</div>
 
 {{template "partials/footer" .}}
