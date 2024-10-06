@@ -1,10 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/sawatkins/upfast-tf/database"
 )
@@ -42,17 +38,17 @@ func GetServerIPs(c *fiber.Ctx) error {
 	}
 	return c.Status(200).JSON(ips)
 }
-
+ 
 func GetServerInfo(c *fiber.Ctx) error {
 	ip := c.Query("ip")
 	if ip == "" {
 		return c.Status(400).SendString("Missing IP query parameter")
 	}
+ 
+	serverInfo, err := database.GetServerInfo(ip)
+	if err != nil {
+		c.Status(500).SendString("Error getting server info")
+	}
 
-	serverInfo, err := database.GetServerInfo()
-
-	
-
-	// Return the server info as JSON
-	return c.JSON(serverInfo)
+	return c.Status(200).JSON(serverInfo)
 }

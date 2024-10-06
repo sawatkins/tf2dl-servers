@@ -111,8 +111,30 @@ func GetServerIPs() ([]string, error) {
 	return ips, nil
 }
 
-func GetServerInfo() {
+func GetServerInfo(ip string) (models.ServerStatus, error) {
+	query := `
+	SELECT public_ip, map, players, max_players, server_hostname
+	FROM servers
+	WHERE public_ip = ?;`
 
+	var serverStatus models.ServerStatus
+	err := db.QueryRow(query, ip).Scan(
+		&serverStatus.PublicIP,
+		&serverStatus.Map,
+		&serverStatus.Players,
+		&serverStatus.MaxPlayers,
+		&serverStatus.Hostname,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			log.Printf("No server found with IP: %s", ip)
+			return serverStatus, nil
+		}
+		log.Printf("Error querying server info for IP %s: %v", ip, err)
+		return serverStatus, err
+	}
+
+	return serverStatus, nil
 }
 
 // UpdateServerInfo updates the server information in the database for each server IP
