@@ -60,27 +60,6 @@ def update_ansible_inventory():
         f.write("ansible_user=ec2-user\n")
         f.write(f"ansible_ssh_private_key_file={os.getenv('SSH_PRIVATE_KEY_PATH')}\n")
         f.write(f"rcon_password={os.getenv('RCON_PASSWORD')}\n")
-    
-# def push_current_servers_to_s3():
-#     current_servers = read_current_servers_file()
-    
-#     content = '\n'.join(server['public_ip'] for server in current_servers.values())
-    
-#     with tempfile.NamedTemporaryFile(mode='w+', delete=False) as temp_file:
-#         temp_file.write(content)
-#         temp_file_path = temp_file.name
-    
-#     try:
-#         subprocess.run([
-#             "aws", "s3", "cp",
-#             temp_file_path,
-#             "s3://upfast-tf2-hosts/servers.txt"
-#         ], check=True)
-#         print("Successfully pushed server IPs to S3")
-#     except subprocess.CalledProcessError as e:
-#         print(f"Error pushing server IPs to S3: {e}")
-#     finally:
-#         os.unlink(temp_file_path)
 
 # create_server creates a all servers with terraform
 def create_server():

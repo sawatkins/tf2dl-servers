@@ -35,7 +35,7 @@ func main() {
 	}
 
 	app := fiber.New(fiber.Config{
-		Views:   engine,
+		Views: engine,
 	})
 
 	app.Use(recover.New())
@@ -55,12 +55,9 @@ func main() {
 }
 
 func startServerInfoUpdater() {
-	ticker := time.NewTicker(20 * time.Second)
+	ticker := time.NewTicker(25 * time.Second)
 	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			database.UpdateServerInfo()
-		}
+	for range ticker.C {
+		database.UpdateServerInfo()
 	}
 }
