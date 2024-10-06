@@ -1,11 +1,9 @@
-// Configuration
-const API_ENDPOINT = 'https://bwdfgz2pbedm7ficoxqxbhfazi0ynfoh.lambda-url.us-west-1.on.aws';
-const POLL_INTERVAL = 60000; // 60 seconds
+const POLL_INTERVAL = 35000; // 35 seconds
 
 // Function to fetch server IPs
 async function fetchServerIPs() {
     try {
-        const response = await fetch(API_ENDPOINT);
+        const response = await fetch("/api/server-ips");
         const ips = await response.json();
         // console.log("ips", ips);
         return ips;

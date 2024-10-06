@@ -55,7 +55,7 @@ func main() {
 }
 
 func startServerInfoUpdater() {
-	ticker := time.NewTicker(25 * time.Second)
+	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {
 		database.UpdateServerInfo()
