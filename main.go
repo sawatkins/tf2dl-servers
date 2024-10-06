@@ -3,14 +3,16 @@ package main
 import (
 	"flag"
 	"log"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html/v2"
 	"github.com/joho/godotenv"
 
-	"github.com/sawatkins/upfast-tf/handlers"
 	"github.com/sawatkins/upfast-tf/database"
+	"github.com/sawatkins/upfast-tf/handlers"
 )
 
 func main() {
@@ -18,12 +20,13 @@ func main() {
 	dev := flag.Bool("dev", true, "Enable development mode")
 	flag.Parse()
 
-	database.InitDB("./data/upfast.db")
-	database.InitServerTable()
-
 	if err := godotenv.Load("./cli/.env"); err != nil {
 		log.Fatalln("Did not load .env file")
 	}
+
+	database.InitDB("./data/upfast.db")
+	database.InitServerTable()
+	go startServerInfoUpdater()
 
 	engine := html.New("./templates", ".html")
 	if *dev {
@@ -49,4 +52,15 @@ func main() {
 
 	log.Println("Server starting on port", *port)
 	log.Fatal(app.Listen(*port)) // default port: 8080
+}
+
+func startServerInfoUpdater() {
+	ticker := time.NewTicker(20 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			database.UpdateServerInfo()
+		}
+	}
 }

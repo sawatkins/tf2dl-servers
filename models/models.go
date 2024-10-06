@@ -11,3 +11,11 @@ type Server struct {
     MaxPlayers     int    `json:"max_players"`
     CreatedAt      string `json:"created_at"` 
 }
+
+type ServerStatus struct {
+    PublicIP   string `json:"public_ip"`
+    Map        string `json:"map"`
+    Players    int    `json:"players"`
+    MaxPlayers int    `json:"max_players"`
+    Hostname   string `json:"hostname"`
+}

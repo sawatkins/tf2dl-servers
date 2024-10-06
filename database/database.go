@@ -2,7 +2,10 @@ package database
 
 import (
 	"database/sql"
+	"encoding/json"
+	"fmt"
 	"log"
+	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sawatkins/upfast-tf/models"
@@ -106,4 +109,59 @@ func GetServerIPs() ([]string, error) {
 	}
 
 	return ips, nil
+}
+
+func GetServerInfo() {
+
+}
+
+// UpdateServerInfo updates the server information in the database for each server IP
+func UpdateServerInfo() {
+	ips, err := GetServerIPs()
+	if err != nil {
+		log.Printf("Error updating server info: %v", err)
+		return
+	}
+
+	for _, ip := range ips {
+		resp, err := http.Get(fmt.Sprintf("http://%s:8000/server-info", ip))
+		if err != nil || resp.StatusCode != http.StatusOK {
+			log.Printf("Error getting server info for %s, status %d: %v", ip, resp.StatusCode, err)
+			return
+		}
+		defer resp.Body.Close()
+
+		var serverStatus models.ServerStatus
+		if err := json.NewDecoder(resp.Body).Decode(&serverStatus); err != nil {
+			log.Printf("Error parsing JSON response from server: %v", err)
+			return
+		}
+
+		// Update the server information in the database
+		updateServerSQL := `
+		UPDATE servers
+		SET map = ?, players = ?, max_players = ?, server_hostname = ?
+		WHERE public_ip = ?;`
+
+		statement, err := db.Prepare(updateServerSQL)
+		if err != nil {
+			log.Printf("Error preparing SQL statement: %v", err)
+			return
+		}
+		defer statement.Close()
+
+		_, err = statement.Exec(
+			serverStatus.Map,
+			serverStatus.Players,
+			serverStatus.MaxPlayers,
+			serverStatus.Hostname,
+			serverStatus.PublicIP,
+		)
+		if err != nil {
+			log.Printf("Error executing SQL statement: %v", err)
+			return
+		}
+
+		log.Printf("Server info updated for IP: %s", ip)
+	}
 }
