@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/sawatkins/upfast-tf/database"
 )
 
 func NotFound(c *fiber.Ctx) error {
@@ -35,15 +36,11 @@ func About(c *fiber.Ctx) error {
 }
 
 func GetServerIPs(c *fiber.Ctx) error {
-	const awsEndpoint string = "https://bwdfgz2pbedm7ficoxqxbhfazi0ynfoh.lambda-url.us-west-1.on.aws"
-
-	resp, err := http.Get(awsEndpoint)
+	ips, err := database.GetServerIPs()
 	if err != nil {
-		return c.Status(500).SendString(fmt.Sprintf("Failed to fetch server IPs: %v", err))
+		return c.Status(500).SendString("Error getting server ips")
 	}
-	defer resp.Body.Close()
-
-	return c.Status(resp.StatusCode).JSON(resp.Body)
+	return c.Status(200).JSON(ips)
 }
 
 func GetServerInfo(c *fiber.Ctx) error {

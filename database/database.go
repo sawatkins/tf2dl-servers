@@ -82,3 +82,28 @@ func WriteServerToDB(server *models.Server) error {
 	return nil
 }
 
+func GetServerIPs() ([]string, error) {
+	rows, err := db.Query("SELECT public_ip FROM servers")
+	if err != nil {
+		log.Printf("Error querying database: %v", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ips []string
+	for rows.Next() {
+		var ip string
+		if err := rows.Scan(&ip); err != nil {
+			log.Printf("Error scanning row: %v", err)
+			return nil, err
+		}
+		ips = append(ips, ip)
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Printf("Error iterating over rows: %v", err)
+		return nil, err
+	}
+
+	return ips, nil
+}
