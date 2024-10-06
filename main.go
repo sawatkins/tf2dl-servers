@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html/v2"
+	"github.com/joho/godotenv"
 
 	"github.com/sawatkins/upfast-tf/handlers"
 	"github.com/sawatkins/upfast-tf/database"
@@ -19,6 +20,10 @@ func main() {
 
 	database.InitDB("./data/upfast.db")
 	database.InitServerTable()
+
+	if err := godotenv.Load("./cli/.env"); err != nil {
+		log.Fatalln("Did not load .env file")
+	}
 
 	engine := html.New("./templates", ".html")
 	if *dev {
@@ -34,6 +39,7 @@ func main() {
 	app.Use(logger.New())
 	app.Static("/", "./static")
 
+	app.Post("/api/current-servers", handlers.PostCurrentServer)
 	app.Get("/api/server-ips", handlers.GetServerIPs)
 	app.Get("/api/server-info", handlers.GetServerInfo)
 

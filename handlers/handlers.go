@@ -35,7 +35,7 @@ func About(c *fiber.Ctx) error {
 }
 
 func GetServerIPs(c *fiber.Ctx) error {
-	const awsEndpoint = "https://bwdfgz2pbedm7ficoxqxbhfazi0ynfoh.lambda-url.us-west-1.on.aws"
+	const awsEndpoint string = "https://bwdfgz2pbedm7ficoxqxbhfazi0ynfoh.lambda-url.us-west-1.on.aws"
 
 	resp, err := http.Get(awsEndpoint)
 	if err != nil {
