@@ -12,6 +12,7 @@ import (
 func PostCurrentServer(c *fiber.Ctx) error {
 	expectedKey := os.Getenv("CLI_AUTH_KEY")
 	requestKey := c.Get("Authorization")
+
 	if expectedKey != requestKey {
 		return c.Status(401).SendString("Unauthorized")
 	}

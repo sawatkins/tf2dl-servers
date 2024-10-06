@@ -25,7 +25,8 @@ def write_server_to_curent_servers_file(new_server):
 
 def post_current_servers_to_db():
     current_servers = read_current_servers_file()
-    headers = { "Authorization": os.getenv("CLI_AUTH_KEY") }
+    headers = { "Authorization": os.getenv("CLI_AUTH_KEY").strip('"') }
+    port = 5000 #TODO: find better way to manage this
     
     for instance_id, server_info in current_servers.items():
         payload = {
@@ -37,7 +38,7 @@ def post_current_servers_to_db():
         }
         
         try:
-            response = requests.post("http://localhost:80/api/current-servers", json=payload, headers=headers)
+            response = requests.post(f"http://localhost:{port}/api/current-servers", json=payload, headers=headers)
             response.raise_for_status()  
             print(f"Posted server {instance_id} to database.")
         except requests.exceptions.RequestException as e:
@@ -169,7 +170,7 @@ def main():
             os.environ[key] = value
 
     parser = argparse.ArgumentParser(description="manage upfast.tf servers")
-    parser.add_argument("command", choices=["create", "destroy", "list"], help="command to execute")
+    parser.add_argument("command", choices=["create", "destroy", "list", "write_db"], help="command to execute")
 
     args = parser.parse_args()
     if args.command == "create":
@@ -178,6 +179,8 @@ def main():
         destroy_server()
     elif args.command == "list":
         print_current_servers()
+    elif args.command == "write_db":
+        post_current_servers_to_db()
     else:
         parser.print_help()
         sys.exit(1)
