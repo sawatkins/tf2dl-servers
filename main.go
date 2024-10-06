@@ -9,12 +9,16 @@ import (
 	"github.com/gofiber/template/html/v2"
 
 	"github.com/sawatkins/upfast-tf/handlers"
+	"github.com/sawatkins/upfast-tf/database"
 )
 
 func main() {
 	port := flag.String("port", ":8080", "Port to listen on")
 	dev := flag.Bool("dev", true, "Enable development mode")
 	flag.Parse()
+
+	database.InitDB("./data/upfast.db")
+	database.InitServerTable()
 
 	engine := html.New("./templates", ".html")
 	if *dev {
