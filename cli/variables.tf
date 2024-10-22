@@ -23,4 +23,9 @@ variable "iam_instance_profile" {
   description = "AWS IAM instance profile for the ec2 instances"
 }
 
+variable "eip_red" {
+  type = string
+  description = "Elastic ip for the tf2 server 'red'"
+}
+
 

@@ -11,26 +11,26 @@ resource "aws_instance" "tf2_server" {
   iam_instance_profile   = var.iam_instance_profile
 
   root_block_device {
-    volume_size = 20
+    volume_size = 15
     volume_type = "gp3"
   }
 
   user_data = <<-EOF
               #!/bin/bash
               sudo yum update -y
-              sudo yum install -y docker htop
-              sudo systemctl enable docker
-              sudo systemctl start docker
-              sudo usermod -aG docker ec2-user
-              newgrp docker
-              docker pull ghcr.io/melkortf/tf2-base
+              sudo yum install -y htop
               python3 -m ensurepip --upgrade
               mkdir -p /home/ec2-user/maps
               EOF
 
   tags = {
-    Name = "upfast-tf2-server"
+    Name = var.name
   }
+}
+
+resource "aws_eip_association" "tf2_server_eip_assoc" {
+  instance_id   = aws_instance.tf2_server.id
+  allocation_id = var.elastic_ip
 }
 
 // output variables

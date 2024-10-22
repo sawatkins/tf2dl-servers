@@ -26,7 +26,7 @@ def write_server_to_curent_servers_file(new_server):
 def post_current_servers_to_db():
     current_servers = read_current_servers_file()
     headers = { "Authorization": os.getenv("CLI_AUTH_KEY").strip('"') }
-    port = 5000 #TODO: find better way to manage this
+    port = 5000 #(8080) TODO: find better way to manage this
     
     for instance_id, server_info in current_servers.items():
         payload = {
@@ -73,42 +73,42 @@ def create_server():
         sys.exit(1)
     
     # save server info to current-servers.json
-    tf2_server_jump_01 = {
-        "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_id"]).decode().strip(),
-        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_ip"]).decode().strip(),
-        "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_dns"]).decode().strip(),
-        "name": "tf2_server_jump_01",
-        "server_hostname": "jump 24/7 - upfast.tf"
+    # tf2_server_jump_01 = {
+    #     "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_id"]).decode().strip(),
+    #     "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_ip"]).decode().strip(),
+    #     "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_dns"]).decode().strip(),
+    #     "name": "tf2_server_jump_01",
+    #     "server_hostname": "jump 24/7 - upfast.tf"
+    # }
+    # write_server_to_curent_servers_file(tf2_server_jump_01)
+    
+    tf2_server_red = {
+        "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_id"]).decode().strip(),
+        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_ip"]).decode().strip(),
+        "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_dns"]).decode().strip(),
+        "name": "tf2_server_red",
+        "server_hostname": "upfast.tf server"
     }
-    write_server_to_curent_servers_file(tf2_server_jump_01)
+    write_server_to_curent_servers_file(tf2_server_red)
     
-    tf2_server_surf_01 = {
-        "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_surf_01_id"]).decode().strip(),
-        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_surf_01_public_ip"]).decode().strip(),
-        "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_surf_01_public_dns"]).decode().strip(),
-        "name": "tf2_server_surf_01",
-        "server_hostname": "surf 24/7 - upfast.tf"
-    }
-    write_server_to_curent_servers_file(tf2_server_surf_01)
+    # print("updating ansible inventory")
+    # update_ansible_inventory()
     
-    print("updating ansible inventory")
-    update_ansible_inventory()
+    # time.sleep(5)
     
-    time.sleep(5)
+    # print("running ansible playbook")
+    # try:
+    #     subprocess.run([
+    #         "ansible-playbook",
+    #         "tf2_server_playbook.yml",
+    #         "-i", "./inventory.ini",
+    #         "-e", "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
+    #     ], check=True)
+    # except subprocess.CalledProcessError as e:
+    #     print(f"Error: Ansible playbook failed with exit code {e.returncode}")
+    #     sys.exit(1)
     
-    print("running ansible playbook")
-    try:
-        subprocess.run([
-            "ansible-playbook",
-            "tf2_server_playbook.yml",
-            "-i", "./inventory.ini",
-            "-e", "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
-        ], check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Error: Ansible playbook failed with exit code {e.returncode}")
-        sys.exit(1)
-    
-    post_current_servers_to_db()
+    # post_current_servers_to_db()
     # push_current_servers_to_s3()
     
 def print_current_servers():
