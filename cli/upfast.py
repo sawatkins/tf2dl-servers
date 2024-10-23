@@ -26,7 +26,7 @@ def write_server_to_curent_servers_file(new_server):
 def post_current_servers_to_db():
     current_servers = read_current_servers_file()
     headers = { "Authorization": os.getenv("CLI_AUTH_KEY").strip('"') }
-    port = 5000 #(8080) TODO: find better way to manage this
+    port = 8080 #(5000) TODO: find better way to manage this
     
     for instance_id, server_info in current_servers.items():
         payload = {
@@ -87,7 +87,7 @@ def create_server():
         "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_ip"]).decode().strip(),
         "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_dns"]).decode().strip(),
         "name": "tf2_server_red",
-        "server_hostname": "upfast.tf server"
+        "server_hostname": "simple surf server - upfast.tf"
     }
     write_server_to_curent_servers_file(tf2_server_red)
     
@@ -145,8 +145,9 @@ def main():
     # read .env file
     with open(".env", "r") as f:
         for line in f:
-            key, value = line.strip().split("=")
-            os.environ[key] = value
+            if not line.startswith("#"):
+                key, value = line.strip().split("=")
+                os.environ[key] = value
 
     parser = argparse.ArgumentParser(description="manage upfast.tf servers")
     parser.add_argument("command", choices=["create", "destroy", "list", "write_db"], help="command to execute")

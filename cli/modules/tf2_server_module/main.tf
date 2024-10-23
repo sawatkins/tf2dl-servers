@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "tf2_server" {
-  ami           = "ami-0fda60cefceeaa4d3" // Amazon Linux 2 AMI
+  ami           = "ami-00fd4a75e141e98d5" # debian ami (prev: "ami-0fda60cefceeaa4d3" amzn linux 2)
   instance_type = var.instance_type
   key_name      = var.key_name
 
@@ -17,10 +17,10 @@ resource "aws_instance" "tf2_server" {
 
   user_data = <<-EOF
               #!/bin/bash
-              sudo yum update -y
-              sudo yum install -y htop
+              sudo apt-get update
+              sudo apt-get upgrade -y
+              sudo apt-get install -y htop
               python3 -m ensurepip --upgrade
-              mkdir -p /home/ec2-user/maps
               EOF
 
   tags = {
