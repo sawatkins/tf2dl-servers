@@ -11,7 +11,7 @@ resource "aws_instance" "tf2_server" {
   iam_instance_profile   = var.iam_instance_profile
 
   root_block_device {
-    volume_size = 15
+    volume_size = 20
     volume_type = "gp3"
   }
 
@@ -19,8 +19,7 @@ resource "aws_instance" "tf2_server" {
               #!/bin/bash
               sudo apt-get update
               sudo apt-get upgrade -y
-              sudo apt-get install -y htop
-              python3 -m ensurepip --upgrade
+              sudo apt-get install -y htop python3-fastapi python3-uvicorn
               EOF
 
   tags = {

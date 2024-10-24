@@ -2,11 +2,12 @@ package database
 
 import (
 	"database/sql"
-	"encoding/json"
-	"fmt"
 	"log"
-	"net/http"
+	"os"
+	"regexp"
+	"strings"
 
+	"github.com/gorcon/rcon"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sawatkins/upfast-tf/models"
 )
@@ -146,17 +147,29 @@ func UpdateServerInfo() {
 	}
 
 	for _, ip := range ips {
-		resp, err := http.Get(fmt.Sprintf("http://%s:8000/server-info", ip))
-		if err != nil || resp.StatusCode != http.StatusOK {
-			log.Printf("Error getting server info for %s, status %d: %v", ip, resp.StatusCode, err)
-			return
-		}
-		defer resp.Body.Close()
+		rconPass := os.Getenv("RCON_PASSWORD")
 
-		var serverStatus models.ServerStatus
-		if err := json.NewDecoder(resp.Body).Decode(&serverStatus); err != nil {
-			log.Printf("Error parsing JSON response from server: %v", err)
-			return
+		client, err := rcon.Dial(ip + ":27015", rconPass)
+		if err != nil {
+			log.Fatalf("Failed to connect to RCON: %v", err)
+		}
+		defer client.Close()
+
+		response, err := client.Execute("status")
+		if err != nil {
+			log.Fatalf("Failed to execute RCON command: %v", err)
+		}
+
+		hostname := extractWithRegex(`hostname:\s*(.+)`, response)
+		gameMap := extractWithRegex(`map\s*:\s*([^\s]+)`, response)
+		players, maxPlayers := extractPlayersWithRegex(`players\s*:\s*(\d+)\s*humans.*\((\d+)\s*max\)`, response)
+
+		var serverStatus models.ServerStatus = models.ServerStatus{
+			PublicIP:   ip,
+			Map:        gameMap,
+			Players:    players,
+			MaxPlayers: maxPlayers,
+			Hostname:   hostname,
 		}
 
 		// Update the server information in the database
@@ -186,4 +199,22 @@ func UpdateServerInfo() {
 
 		log.Printf("Server info updated for IP: %s", ip)
 	}
+}
+
+func extractWithRegex(pattern, response string) string {
+	re := regexp.MustCompile(pattern)
+	match := re.FindStringSubmatch(response)
+	if len(match) > 1 {
+		return strings.TrimSpace(match[1])
+	}
+	return ""
+}
+
+func extractPlayersWithRegex(pattern, response string) (string, string) {
+	re := regexp.MustCompile(pattern)
+	match := re.FindStringSubmatch(response)
+	if len(match) > 2 {
+		return match[1], match[2]
+	}
+	return string(rune(0)), string(rune(0))
 }

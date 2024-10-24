@@ -15,7 +15,7 @@ type Server struct {
 type ServerStatus struct {
     PublicIP   string `json:"public_ip"`
     Map        string `json:"map"`
-    Players    int    `json:"players"`
-    MaxPlayers int    `json:"max_players"`
+    Players    string    `json:"players"`
+    MaxPlayers string    `json:"max_players"`
     Hostname   string `json:"hostname"`
 }

@@ -17,3 +17,6 @@ current-servers.json
 upfast-generated.py
 data/
 data-dev/
+.pyc
+.jump
+.surf
