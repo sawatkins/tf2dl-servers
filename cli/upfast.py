@@ -6,8 +6,6 @@ import os
 import sys
 import shutil
 import json
-import time
-# import tempfile
 import requests
 
 
@@ -50,16 +48,6 @@ def read_current_servers_file():
             return json.load(f)
     else:
         return {}
-    
-def update_ansible_inventory():
-    with open("./inventory.ini", "w") as f:
-        f.write("[tf2_server]\n")
-        for _, server_info in read_current_servers_file().items():
-            f.write(f"{server_info['public_dns']} server_hostname='{server_info['server_hostname']}'\n")
-        f.write("[tf2_server:vars]\n")
-        f.write("ansible_user=ec2-user\n")
-        f.write(f"ansible_ssh_private_key_file={os.getenv('SSH_PRIVATE_KEY_PATH')}\n")
-        f.write(f"rcon_password={os.getenv('RCON_PASSWORD')}\n")
 
 # create_server creates a all servers with terraform
 def create_server():
@@ -72,44 +60,25 @@ def create_server():
         print(f"Error: Terraform apply failed with exit code {e.returncode}")
         sys.exit(1)
     
-    # save server info to current-servers.json
-    # tf2_server_jump_01 = {
-    #     "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_id"]).decode().strip(),
-    #     "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_ip"]).decode().strip(),
-    #     "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_jump_01_public_dns"]).decode().strip(),
-    #     "name": "tf2_server_jump_01",
-    #     "server_hostname": "jump 24/7 - upfast.tf"
-    # }
-    # write_server_to_curent_servers_file(tf2_server_jump_01)
-    
     tf2_server_red = {
         "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_id"]).decode().strip(),
-        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_ip"]).decode().strip(),
+        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_ip"]).decode().strip(), # TODO get the elastic ip
         "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_dns"]).decode().strip(),
         "name": "tf2_server_red",
         "server_hostname": "simple surf server - upfast.tf"
     }
     write_server_to_curent_servers_file(tf2_server_red)
     
-    # print("updating ansible inventory")
-    # update_ansible_inventory()
+    # tf2_server_red = {
+    #     "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_id"]).decode().strip(),
+    #     "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_ip"]).decode().strip(),
+    #     "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_dns"]).decode().strip(),
+    #     "name": "tf2_server_red",
+    #     "server_hostname": "simple surf server - upfast.tf"
+    # }
+    # write_server_to_curent_servers_file(tf2_server_red)
     
-    # time.sleep(5)
-    
-    # print("running ansible playbook")
-    # try:
-    #     subprocess.run([
-    #         "ansible-playbook",
-    #         "tf2_server_playbook.yml",
-    #         "-i", "./inventory.ini",
-    #         "-e", "ansible_ssh_common_args='-o StrictHostKeyChecking=no'"
-    #     ], check=True)
-    # except subprocess.CalledProcessError as e:
-    #     print(f"Error: Ansible playbook failed with exit code {e.returncode}")
-    #     sys.exit(1)
-    
-    # post_current_servers_to_db()
-    # push_current_servers_to_s3()
+    post_current_servers_to_db()
     
 def print_current_servers():
     current_servers = read_current_servers_file()
@@ -124,15 +93,30 @@ def print_current_servers():
         print(f"  Name: {server_info['name']}")
         print(f"  Server Hostname: {server_info['server_hostname']}")
         print("")
+
+def connect_to_server():
+    print_current_servers()
+    server_name = input("Enter the server name to connect to (Name): ").strip()
+    
+    current_servers = read_current_servers_file()
+    for server_info in current_servers.values():
+        if server_info["name"] == server_name:
+            public_ip = server_info["public_ip"]
+            try:
+                subprocess.run(["ssh", "-i", os.getenv("SSH_PRIVATE_KEY_PATH").strip('"'), f"admin@{public_ip}"], check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"Error: SSH connection failed with exit code {e.returncode}")
+            return
+    
+    print(f"No server found with the name: {server_name}")
         
 def destroy_server():
     # for now, delete all
     subprocess.run(["terraform", "destroy", "-var-file", f"./upfast.tfvars"], check=True)
-    os.remove("./inventory.ini")
     os.remove("./current-servers.json")
 
 def check_dependencies():
-    required_programs = ["aws", "ansible", "terraform"]
+    required_programs = ["aws", "terraform"]
     for program in required_programs:
         if not shutil.which(program):
             print(f"Error: {program} is not installed or not found in PATH.")
@@ -150,7 +134,7 @@ def main():
                 os.environ[key] = value
 
     parser = argparse.ArgumentParser(description="manage upfast.tf servers")
-    parser.add_argument("command", choices=["create", "destroy", "list", "write_db"], help="command to execute")
+    parser.add_argument("command", choices=["create", "destroy", "list", "connect", "write_db"], help="command to execute")
 
     args = parser.parse_args()
     if args.command == "create":
@@ -159,6 +143,8 @@ def main():
         destroy_server()
     elif args.command == "list":
         print_current_servers()
+    elif args.command == "connect":
+        connect_to_server()
     elif args.command == "write_db":
         post_current_servers_to_db()
     else:
