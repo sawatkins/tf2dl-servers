@@ -155,6 +155,31 @@ func GetServerInfo(ip string) (models.ServerStatus, error) {
 	return serverStatus, nil
 }
 
+func GetTotalPlayerSessions() int {
+	var count int
+	query := "SELECT COUNT(*) FROM player_sessions"
+
+	err := db.QueryRow(query).Scan(&count)
+	if err != nil {
+		log.Printf("Error querying total player sessions: %v", err)
+		return 0
+	}
+
+	return count
+}
+
+func GetTotalTimePlayed() int {
+	var totalDuration int
+	query := "SELECT SUM(duration) FROM player_sessions"
+
+	err := db.QueryRow(query).Scan(&totalDuration)
+	if err != nil {
+		log.Printf("Error querying total time played: %v", err)
+		return 0
+	}
+
+	return totalDuration / 60 // return minues
+}
 // UpdateServerInfo updates the server information and active player connection in the db for each server IP
 func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 	ips, err := GetServerIPs()
@@ -169,6 +194,7 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 		client, err := rcon.Dial(ip+":27015", rconPass)
 		if err != nil {
 			log.Fatalf("Failed to connect to RCON: %v", err)
+			// TODO: delete prev sessions, or continue loop, if this fails
 		}
 		defer client.Close()
 
