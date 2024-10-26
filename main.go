@@ -13,6 +13,7 @@ import (
 
 	"github.com/sawatkins/upfast-tf/database"
 	"github.com/sawatkins/upfast-tf/handlers"
+	"github.com/sawatkins/upfast-tf/models"
 )
 
 func main() {
@@ -26,6 +27,7 @@ func main() {
 
 	database.InitDB("./data/upfast.db")
 	database.InitServerTable()
+	database.InitPlayerSessionTable()
 	go startServerInfoUpdater()
 
 	engine := html.New("./templates", ".html")
@@ -55,9 +57,10 @@ func main() {
 }
 
 func startServerInfoUpdater() {
+	prevPlayerConnections := map[string]map[string]int64{} // map[ip]map[playerID]timestamp{}
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	for range ticker.C {
-		database.UpdateServerInfo()
+		database.UpdateServerInfo(&prevPlayerConnections)
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/gorcon/rcon"
 	_ "github.com/mattn/go-sqlite3"
@@ -43,8 +44,38 @@ func InitServerTable() {
 
 	executeSQL(createServerTableSQL)
 
-	log.Println("Table created")
+	log.Println("Servers table created")
 }
+
+func InitPlayerSessionTable() {
+	createPlayerSessionTableSQL := `
+	CREATE TABLE IF NOT EXISTS player_sessions (
+    	id INTEGER PRIMARY KEY AUTOINCREMENT,
+    	steam_id TEXT NOT NULL,
+    	connect_time TEXT NOT NULL,
+    	disconnect_time TEXT,
+    	duration INTEGER,
+		public_ip CHAR(15),
+	);`
+
+	executeSQL(createPlayerSessionTableSQL)
+
+	log.Println("PlayerSession table created")
+}
+
+// func InitActivePlayerConnectionTable() {
+// 	createActivePlayerConnectionTableSQL := `
+// 	CREATE TABLE IF NOT EXISTS active_player_connections (
+//     	id INTEGER PRIMARY KEY AUTOINCREMENT,
+// 		connect_time TEXT,
+// 		public_ip TEXT,
+// 		steam_id TEXT
+// 	);`
+
+// 	executeSQL(createActivePlayerConnectionTableSQL)
+
+// 	log.Println("ActivePlayerConnection table created")
+// }
 
 func executeSQL(sqlStatement string) {
 	_, err := db.Exec(sqlStatement)
@@ -138,8 +169,12 @@ func GetServerInfo(ip string) (models.ServerStatus, error) {
 	return serverStatus, nil
 }
 
-// UpdateServerInfo updates the server information in the database for each server IP
-func UpdateServerInfo() {
+func getActivePlayerIDs(ip string) ([]string, error) {
+
+}
+
+// UpdateServerInfo updates the server information and active player connection in the db for each server IP
+func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 	ips, err := GetServerIPs()
 	if err != nil {
 		log.Printf("Error updating server info: %v", err)
@@ -149,7 +184,7 @@ func UpdateServerInfo() {
 	for _, ip := range ips {
 		rconPass := os.Getenv("RCON_PASSWORD")
 
-		client, err := rcon.Dial(ip + ":27015", rconPass)
+		client, err := rcon.Dial(ip+":27015", rconPass)
 		if err != nil {
 			log.Fatalf("Failed to connect to RCON: %v", err)
 		}
@@ -160,11 +195,13 @@ func UpdateServerInfo() {
 			log.Fatalf("Failed to execute RCON command: %v", err)
 		}
 
-		hostname := extractWithRegex(`hostname:\s*(.+)`, response)
-		gameMap := extractWithRegex(`map\s*:\s*([^\s]+)`, response)
-		players, maxPlayers := extractPlayersWithRegex(`players\s*:\s*(\d+)\s*humans.*\((\d+)\s*max\)`, response)
+		// get server status
+		hostname := extract(`hostname:\s*(.+)`, response)
+		gameMap := extract(`map\s*:\s*([^\s]+)`, response)
+		players, maxPlayers := extractPlayers(`players\s*:\s*(\d+)\s*humans.*\((\d+)\s*max\)`, response)
 
-		var serverStatus models.ServerStatus = models.ServerStatus{
+		// Update the server information in the database
+		serverStatus := models.ServerStatus{
 			PublicIP:   ip,
 			Map:        gameMap,
 			Players:    players,
@@ -172,7 +209,6 @@ func UpdateServerInfo() {
 			Hostname:   hostname,
 		}
 
-		// Update the server information in the database
 		updateServerSQL := `
 		UPDATE servers
 		SET map = ?, players = ?, max_players = ?, server_hostname = ?
@@ -198,10 +234,86 @@ func UpdateServerInfo() {
 		}
 
 		log.Printf("Server info updated for IP: %s", ip)
+
+
+		// Update active player connections
+		currentPlayerIds := extractUniqueIDs(response)
+
+		// get new ids (ids in current players not in prev ids)
+		// newIds := []string{}
+		for _, currID := range currentPlayerIds {
+			if _, exists := (*prevPlayerConnections)[ip][currID]; !exists {
+				// for newIds, create new entry in prevplayer connections
+				(*prevPlayerConnections)[ip][currID] = time.Now().Unix()
+			}
+		}
+
+		// get disconnedted ids (ids in prev ids not in current players)
+		disconnectedIds := []string{}
+		for prevID := range (*prevPlayerConnections)[ip] {
+			if !contains(currentPlayerIds, prevID) {
+				disconnectedIds = append(disconnectedIds, prevID)
+			}
+		}
+		
+		// for disconnectedIds, 
+		// add player session to the db
+		for _, id := range disconnectedIds {
+			connectTime := time.Unix((*prevPlayerConnections)[ip][id], 0)
+			disconnectTime := time.Now()
+			duration := disconnectTime.Sub(connectTime)
+			newPlayerSession := models.PlayerSession {
+				SteamID: id,
+				ConnectTime: connectTime.String(),
+				DisconnectTime: disconnectTime.String(),
+				Duration: int(duration.Seconds()),
+				PublicIP: ip,
+			}
+
+			// add newPlayerSession to the player_sessions table
+			insertPlayerSessionSQL := `
+			INSERT INTO player_sessions (
+				steam_id, connect_time, disconnect_time, duration, public_ip
+			) VALUES (?, ?, ?, ?, ?);`
+
+			statement, err := db.Prepare(insertPlayerSessionSQL)
+			if err != nil {
+				log.Printf("Error preparing SQL statement for player session: %v", err)
+				continue
+			}
+			defer statement.Close()
+
+			_, err = statement.Exec(
+				newPlayerSession.SteamID,
+				newPlayerSession.ConnectTime,
+				newPlayerSession.DisconnectTime,
+				newPlayerSession.Duration,
+				newPlayerSession.PublicIP,
+			)
+			if err != nil {
+				log.Printf("Error executing SQL statement for player session: %v", err)
+				continue
+			}
+
+			log.Printf("Player session recorded for SteamID: %s", id)
+
+			// delete entry from prevPlayerConnections
+			delete((*prevPlayerConnections)[ip], id)
+		}
+
 	}
 }
 
-func extractWithRegex(pattern, response string) string {
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+
+func extract(pattern, response string) string {
 	re := regexp.MustCompile(pattern)
 	match := re.FindStringSubmatch(response)
 	if len(match) > 1 {
@@ -210,11 +322,17 @@ func extractWithRegex(pattern, response string) string {
 	return ""
 }
 
-func extractPlayersWithRegex(pattern, response string) (string, string) {
+func extractPlayers(pattern, response string) (string, string) {
 	re := regexp.MustCompile(pattern)
 	match := re.FindStringSubmatch(response)
 	if len(match) > 2 {
 		return match[1], match[2]
 	}
 	return string(rune(0)), string(rune(0))
+}
+
+func extractUniqueIDs(response string) []string {
+	re := regexp.MustCompile(`\[U:1:\d+\]`)
+	matches := re.FindAllString(response, -1)
+	return matches
 }
