@@ -55,27 +55,13 @@ func InitPlayerSessionTable() {
     	connect_time TEXT NOT NULL,
     	disconnect_time TEXT,
     	duration INTEGER,
-		public_ip CHAR(15),
+		public_ip CHAR(15)
 	);`
 
 	executeSQL(createPlayerSessionTableSQL)
 
 	log.Println("PlayerSession table created")
 }
-
-// func InitActivePlayerConnectionTable() {
-// 	createActivePlayerConnectionTableSQL := `
-// 	CREATE TABLE IF NOT EXISTS active_player_connections (
-//     	id INTEGER PRIMARY KEY AUTOINCREMENT,
-// 		connect_time TEXT,
-// 		public_ip TEXT,
-// 		steam_id TEXT
-// 	);`
-
-// 	executeSQL(createActivePlayerConnectionTableSQL)
-
-// 	log.Println("ActivePlayerConnection table created")
-// }
 
 func executeSQL(sqlStatement string) {
 	_, err := db.Exec(sqlStatement)
@@ -169,10 +155,6 @@ func GetServerInfo(ip string) (models.ServerStatus, error) {
 	return serverStatus, nil
 }
 
-func getActivePlayerIDs(ip string) ([]string, error) {
-
-}
-
 // UpdateServerInfo updates the server information and active player connection in the db for each server IP
 func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 	ips, err := GetServerIPs()
@@ -238,15 +220,20 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 
 		// Update active player connections
 		currentPlayerIds := extractUniqueIDs(response)
+		// log.Println("currentPlayerIds", currentPlayerIds)
 
 		// get new ids (ids in current players not in prev ids)
-		// newIds := []string{}
 		for _, currID := range currentPlayerIds {
 			if _, exists := (*prevPlayerConnections)[ip][currID]; !exists {
 				// for newIds, create new entry in prevplayer connections
+				if (*prevPlayerConnections)[ip] == nil {
+					(*prevPlayerConnections)[ip] = make(map[string]int64)
+				}
 				(*prevPlayerConnections)[ip][currID] = time.Now().Unix()
 			}
 		}
+
+		// log.Println("prevPlayerConenctions", (*prevPlayerConnections))
 
 		// get disconnedted ids (ids in prev ids not in current players)
 		disconnectedIds := []string{}
@@ -255,9 +242,10 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 				disconnectedIds = append(disconnectedIds, prevID)
 			}
 		}
-		
-		// for disconnectedIds, 
-		// add player session to the db
+
+		// log.Println("disconnectedIds", disconnectedIds)
+
+		// for disconnectedIds, add player session to the db
 		for _, id := range disconnectedIds {
 			connectTime := time.Unix((*prevPlayerConnections)[ip][id], 0)
 			disconnectTime := time.Now()
@@ -332,7 +320,7 @@ func extractPlayers(pattern, response string) (string, string) {
 }
 
 func extractUniqueIDs(response string) []string {
-	re := regexp.MustCompile(`\[U:1:\d+\]`)
+	re := regexp.MustCompile(`U:1:\d+`)
 	matches := re.FindAllString(response, -1)
 	return matches
 }

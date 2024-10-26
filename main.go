@@ -13,7 +13,6 @@ import (
 
 	"github.com/sawatkins/upfast-tf/database"
 	"github.com/sawatkins/upfast-tf/handlers"
-	"github.com/sawatkins/upfast-tf/models"
 )
 
 func main() {
