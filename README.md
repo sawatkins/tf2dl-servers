@@ -1,15 +1,17 @@
 # upfast-tf
 
-Web platform that hosts and monitors dedicated video game (Team Fortress 2) servers. https://upfast.tf  
+Web platform that hosts and monitors free public dedicated video game (Team Fortress 2) servers.  https://upfast.tf   
+ 
 
-Servers are hosted on AWS EC2 and were provisioned with Terraform.  
+This a personal project of mine. I created it mainly to gain experience provisioning and managing cloud servers.
 
-Servers are monitored with custom scripts and APIs.   
+Servers are hosted on AWS EC2 instances created with Terraform. I monitor the server health with Prometheus. The backend is written in Go. 
 
----  
+---    
+ 
+Future plans:  
+ - Add more public servers
+ - Allow anyone to create and reserve a private server for a set time
 
-Future plans:
 
- - Monitor servers with Prometheus (in progress)  
- - Allow users to host their own servers
 

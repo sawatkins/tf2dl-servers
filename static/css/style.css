@@ -181,6 +181,9 @@ body {
 }
 
 @media (max-width: 480px) {
+  .about-page {
+    margin: 20px 0;
+  }
   #go-to-desktop-to-connect {
     display: block;
   }
@@ -206,7 +209,7 @@ body {
   /* padding: 20px;
   background-color: #2a2b2e;
   border-radius: 8px; */
-  margin: 20px 0;
+  margin: 20px;
 }
 
 .about-page .section-title {
@@ -234,7 +237,7 @@ body {
 }
 
 .limited-width {
-  max-width: 75ch; /* 75 characters */
+  /* max-width: 75ch; 75 characters */
   word-wrap: break-word;
 }
 
@@ -256,3 +259,8 @@ body {
 .stats {
   color: #bababa
 }
+
+/* hr {
+  margin-left: 15px;
+  margin-right: 15px;
+} */
