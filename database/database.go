@@ -193,14 +193,16 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 
 		client, err := rcon.Dial(ip+":27015", rconPass)
 		if err != nil {
-			log.Fatalf("Failed to connect to RCON: %v", err)
+			log.Printf("Failed to connect to RCON: %v", err)
+			return
 			// TODO: delete prev sessions, or continue loop, if this fails
 		}
 		defer client.Close()
 
 		response, err := client.Execute("status")
 		if err != nil {
-			log.Fatalf("Failed to execute RCON command: %v", err)
+			log.Printf("Failed to execute RCON command: %v", err)
+			return
 		}
 
 		// get server status

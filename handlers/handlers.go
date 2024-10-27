@@ -15,8 +15,8 @@ func Index(c *fiber.Ctx) error {
 	return c.Render("index", fiber.Map{
 		"Title":               "upfast.tf",
 		"Canonical":           "https://upfast.tf",
-		"Robots":              "noindex, nofollow",
-		"Description":         "upfast.tf is a simple tf2 server hosting service",
+		"Robots":              "index, follow",
+		"Description":         "Hosts public Team Fortress 2 servers for anyone to play",
 		"Keywords":            "upfast.tf, upfast, tf2, servers, hosting, game, server, hosting",
 		"TotalPlayerSessions": database.GetTotalPlayerSessions(),
 		"TotalTimePlayed":     database.GetTotalTimePlayed(),
@@ -27,7 +27,7 @@ func About(c *fiber.Ctx) error {
 	return c.Render("about", fiber.Map{
 		"Title":       "About - upfast.tf",
 		"Canonical":   "https://upfast.tf/about",
-		"Robots":      "noindex, nofollow",
+		"Robots":      "index, follow",
 		"Description": "About upfast.tf",
 		"Keywords":    "upfast.tf, upfast, tf2, servers, hosting, game, server, hosting",
 	}, "layouts/main")
