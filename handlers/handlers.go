@@ -49,7 +49,7 @@ func GetServerInfo(c *fiber.Ctx) error {
 
 	serverInfo, err := database.GetServerInfo(ip)
 	if err != nil {
-		c.Status(500).SendString("Error getting server info")
+		return c.Status(500).SendString("Error getting server info")
 	}
 
 	return c.Status(200).JSON(serverInfo)

@@ -152,7 +152,7 @@ func GetServerInfo(ip string) (models.ServerStatus, error) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Printf("No server found with IP: %s", ip)
-			return serverStatus, nil
+			return serverStatus, nil // TODO: is nil correct here?
 		}
 		log.Printf("Error querying server info for IP %s: %v", ip, err)
 		return serverStatus, err
