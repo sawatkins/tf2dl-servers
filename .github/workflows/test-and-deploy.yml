@@ -24,6 +24,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            source ~/.profile
             cd ~/upfast-tf
             git pull
             if ! go build -o main .; then
