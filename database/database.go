@@ -42,7 +42,7 @@ func InitServerTable() {
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);`
 
-	executeSQL(createServerTableSQL)
+	ExecuteSQL(createServerTableSQL)
 
 	log.Println("Servers table created")
 }
@@ -58,16 +58,22 @@ func InitPlayerSessionTable() {
 		public_ip CHAR(15)
 	);`
 
-	executeSQL(createPlayerSessionTableSQL)
+	ExecuteSQL(createPlayerSessionTableSQL)
 
 	log.Println("PlayerSession table created")
 }
 
-func executeSQL(sqlStatement string) {
+func ExecuteSQL(sqlStatement string) {
 	_, err := db.Exec(sqlStatement)
 	if err != nil {
 		log.Fatalf("Error executing SQL statement: %v", err)
 	}
+}
+
+func Close() {
+    if db != nil {
+        db.Close()
+    }
 }
 
 func WriteServerToDB(server *models.Server) error {
@@ -195,7 +201,7 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 		if err != nil {
 			log.Printf("Failed to connect to RCON: %v", err)
 			return
-			// TODO: delete prev sessions, or continue loop, if this fails
+			// TODO: delete prev sessions, or continue loop, if this fails?
 		}
 		defer client.Close()
 
@@ -261,7 +267,7 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 			}
 		}
 
-		// log.Println("prevPlayerConenctions", (*prevPlayerConnections))
+		log.Println("prevPlayerConenctions", (*prevPlayerConnections))
 
 		// get disconnedted ids (ids in prev ids not in current players)
 		disconnectedIds := []string{}

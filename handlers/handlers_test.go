@@ -86,21 +86,70 @@ func TestAbout(t *testing.T) {
 }
 
 func TestGetServerIPs(t *testing.T) {
-	type args struct {
-		c *fiber.Ctx
+	// Initialize test database
+	database.InitDB(":memory:")
+	database.InitServerTable()
+
+	engine := html.New("../templates", ".html")
+	app := fiber.New(fiber.Config{Views: engine})
+	app.Get("/api/servers", GetServerIPs)
+
+	// Test 1: Empty server list
+	req := httptest.NewRequest(http.MethodGet, "/api/servers", nil)
+	resp, err := app.Test(req)
+
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
 	}
-	tests := []struct {
-		name    string
-		args    args
-		wantErr bool
-	}{
-		// TODO: Add test cases.
+
+	// Check status code is 200 even with empty list
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status code 200, got %d", resp.StatusCode)
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := GetServerIPs(tt.args.c); (err != nil) != tt.wantErr {
-				t.Errorf("GetServerIPs() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
+
+	// Test 2: With server IPs in database
+	// Insert test data using ExecuteSQL
+	insertSQL := `
+		INSERT INTO servers (
+			instance_id, public_ip, public_dns, name, server_hostname, map, players, max_players
+		) VALUES 
+		('i-1234567890', '192.168.1.1', 'ec2-1.compute.amazonaws.com', 'Server1', 'TF2 Server 1', 'cp_badlands', 0, 24),
+		('i-0987654321', '192.168.1.2', 'ec2-2.compute.amazonaws.com', 'Server2', 'TF2 Server 2', 'cp_process', 0, 24)
+	`
+	database.ExecuteSQL(insertSQL)
+
+	req = httptest.NewRequest(http.MethodGet, "/api/servers", nil)
+	resp, err = app.Test(req)
+
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+
+	// Check status code
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status code 200, got %d", resp.StatusCode)
+	}
+
+	// Check content type
+	if contentType := resp.Header.Get("Content-Type"); contentType != "application/json" {
+		t.Errorf("Expected content type 'application/json', got '%s'", contentType)
+	}
+
+	// Test 3: Database error scenario
+	// Close the database to simulate an error
+	database.Close()
+
+	req = httptest.NewRequest(http.MethodGet, "/api/servers", nil)
+	resp, err = app.Test(req)
+
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+
+	// Check error status code
+	if resp.StatusCode != http.StatusInternalServerError {
+		t.Errorf("Expected status code 500, got %d", resp.StatusCode)
 	}
 }
+
+GetServerInfo
