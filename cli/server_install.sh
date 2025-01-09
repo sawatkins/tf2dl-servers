@@ -44,7 +44,8 @@ apt-get install -y \
   tar
 
 # Create gameserver user
-adduser --disabled-password --shell /bin/bash --gecos "" gameserver
+useradd -m -s /bin/bash -U gameserver
+passwd -l gameserver
 
 # Install tf2 server as gameserver user
 su - gameserver <<'EOF'
