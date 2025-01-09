@@ -10,6 +10,7 @@ inventory.ini
 old/
 tmp/
 main
+build.sh
 .air.toml
 base.toml
 *.tfvars
