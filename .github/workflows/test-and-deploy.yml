@@ -7,28 +7,31 @@ on:
     branches: [ main ]
 
 jobs:
-  test-and-deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Test
+
+      - name: Run tests
         run: go test -v ./handlers
 
+  deploy:
+    if: github.event_name == 'push'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
       - name: Deploy
-        # Only deploy on push to main, not on pull requests
-        if: github.event_name == 'push'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            set -e
             source ~/.profile
             cd ~/upfast-tf
             git pull
-            if ! go build -o main .; then
-              echo "Build failed"
-              exit 1
-            fi
+            go build -o main .
             systemctl restart upfast
