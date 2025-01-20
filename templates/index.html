@@ -42,6 +42,7 @@
         <span id="how-to-connect">How to connect</span>
         <span id="refresh">Manual refresh</span>
     </div>
+    <br id="spacer" style="display: none;">
     <div class="content-area small-text" id="connection-steps">
         <p><span style="font-weight: bold;">How do I connect to the server?</span><br>You can click the "Connect" button
             on
@@ -50,6 +51,7 @@
         </p>
     </div>
 
+    
     <div class="content-area section-title"><strong>Stats:</strong></div>
     <div class="content-area stats">
         <div class="content-area">&bull; &MediumSpace;Total player sessions: <strong>{{ .TotalPlayerSessions }}</strong></div>
@@ -73,12 +75,15 @@
         document.addEventListener('DOMContentLoaded', function () {
             const howToConnect = document.getElementById('how-to-connect');
             const connectionSteps = document.getElementById('connection-steps');
+            const spacer = document.getElementById('spacer');
 
             howToConnect.addEventListener('click', function () {
                 if (connectionSteps.style.display === 'none') {
                     connectionSteps.style.display = 'block';
+                    spacer.style.display = 'none';
                 } else {
                     connectionSteps.style.display = 'none';
+                    spacer.style.display = '';
                 }
             });
         });

@@ -14,12 +14,18 @@ div.footer p a:visited {
 
 a {
   color: #9eb6dd;
+  text-decoration: none;
 }
 
 a:hover {
   color: #879bbd;
+  text-decoration: underline;
   /* background-color: rgba(81, 91, 112, 0.4); */
   /* background-color: rgba(0, 0, 0, 0.18); */
+}
+
+#navbar a {
+  text-decoration: underline;
 }
 
 div#heading {
@@ -225,11 +231,12 @@ body {
 
 .about-page a {
   color: #9eb6dd;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .about-page a:hover {
   color: #8194b3;
+  text-decoration: underline;
 }
 
 .about-page p {

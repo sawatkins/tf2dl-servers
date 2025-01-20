@@ -16,7 +16,7 @@ func Index(c *fiber.Ctx) error {
 		"Title":               "upfast.tf",
 		"Canonical":           "https://upfast.tf",
 		"Robots":              "index, follow",
-		"Description":         "Hosts public Team Fortress 2 servers for anyone to play",
+		"Description":         "Public, Dedicated Team Fortress 2 Servers",
 		"Keywords":            "upfast.tf, upfast, tf2, servers, hosting, game, server, hosting",
 		"TotalPlayerSessions": database.GetTotalPlayerSessions(),
 		"TotalTimePlayed":     database.GetTotalTimePlayed(),
