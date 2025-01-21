@@ -1,11 +1,26 @@
-variable "region" {
+variable "region_us" {
   type = string
   default = "us-west-1"
 }
 
+variable "region_eu" {
+  type = string
+  default = "eu-central-1"
+}
+
+variable "ami_us" {
+  type = string
+  description = "AMI of base tf2 server in us"
+}
+
+variable "ami_eu" {
+  type = string
+  description = "AMI of base tf2 server in eu"
+}
+
 variable "instance_type" {
   type = string
-  default = "t3a.small"
+  default = "t3a.micro"
 }
 
 variable "key_name" {
@@ -23,9 +38,14 @@ variable "iam_instance_profile" {
   description = "AWS IAM instance profile for the ec2 instances"
 }
 
-variable "eip_red" {
+variable "eip_us" {
   type = string
-  description = "Elastic ip for the tf2 server 'red'"
+  description = "Elastic ip for the us tf2 server"
+}
+
+variable "eip_eu" {
+  type = string
+  description = "Elastic ip for the eu tf2 server"
 }
 
 

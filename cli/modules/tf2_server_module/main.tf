@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "tf2_server" {
-  ami           = "ami-00fd4a75e141e98d5" # debian ami (prev: "ami-0fda60cefceeaa4d3" amzn linux 2)
+  ami           = var.ami # base tf2 server image i previously created
   instance_type = var.instance_type
   key_name      = var.key_name
 
@@ -19,7 +19,6 @@ resource "aws_instance" "tf2_server" {
               #!/bin/bash
               sudo apt-get update
               sudo apt-get upgrade -y
-              sudo apt-get install -y htop python3-fastapi python3-uvicorn
               EOF
 
   tags = {

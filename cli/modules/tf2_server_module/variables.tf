@@ -3,9 +3,13 @@ variable "region" {
   default = "us-west-1"
 }
 
+variable "ami" {
+  type = string
+}
+
 variable "instance_type" {
   type = string
-  default = "t3a.small"
+  default = "t3a.micro"
 }
 
 variable "key_name" {

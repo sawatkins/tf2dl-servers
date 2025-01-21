@@ -64,7 +64,9 @@ rm steamcmd_linux.tar.gz
 mkdir -p ~/hlserver/tf2/tf/maps
 cd ~/hlserver/tf2/tf/maps
 wget https://upfast.tf/maps/surf_utopia_v3.bsp
-wget https://upfast.tf/maps/surf_pulse_v2.bsp
+wget https://upfast.tf/maps/surf_rainbow_v1.bsp
+wget https://upfast.tf/maps/surf_utopia_v3.bsp.bz2
+wget https://upfast.tf/maps/surf_rainbow_v1.bsp.bz2
 
 # create tf2 config files
 cd ~/hlserver/tf2/tf/cfg

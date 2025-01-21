@@ -54,29 +54,29 @@ def create_server():
     try:
         subprocess.run([
             "terraform", "apply",
-            "-var-file", f"./upfast.tfvars"
+            "-var-file", f"./terraform.tfvars"
         ], check=True)
     except subprocess.CalledProcessError as e:
         print(f"Error: Terraform apply failed with exit code {e.returncode}")
         sys.exit(1)
     
-    tf2_server_red = {
-        "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_id"]).decode().strip(),
-        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_ip"]).decode().strip(), # TODO get the elastic ip
-        "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_dns"]).decode().strip(),
-        "name": "tf2_server_red",
-        "server_hostname": "simple surf server - upfast.tf"
+    tf2_server_us = {
+        "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_us_id"]).decode().strip(),
+        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_us_public_ip"]).decode().strip(), # TODO get the elastic ip
+        "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_us_public_dns"]).decode().strip(),
+        "name": "tf2_server_us",
+        "server_hostname": "simple surf server (us) - upfast.tf"
     }
-    write_server_to_curent_servers_file(tf2_server_red)
+    write_server_to_curent_servers_file(tf2_server_us)
     
-    # tf2_server_red = {
-    #     "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_id"]).decode().strip(),
-    #     "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_ip"]).decode().strip(),
-    #     "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_red_public_dns"]).decode().strip(),
-    #     "name": "tf2_server_red",
-    #     "server_hostname": "simple surf server - upfast.tf"
-    # }
-    # write_server_to_curent_servers_file(tf2_server_red)
+    tf2_server_eu = {
+        "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_id"]).decode().strip(),
+        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_ip"]).decode().strip(),
+        "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_public_dns"]).decode().strip(),
+        "name": "tf2_server_eu",
+        "server_hostname": "simple surf server (eu) - upfast.tf"
+    }
+    write_server_to_curent_servers_file(tf2_server_eu)
     
     post_current_servers_to_db()
     
