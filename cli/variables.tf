@@ -28,7 +28,12 @@ variable "key_name" {
   description = "The ssh key pair to connect to the ec2 instances"
 }
 
-variable "security_group_id" {
+variable "security_group_id_us" {
+  type = string
+  description = "AWS security group for the ec2 instances"
+}
+
+variable "security_group_id_eu" {
   type = string
   description = "AWS security group for the ec2 instances"
 }

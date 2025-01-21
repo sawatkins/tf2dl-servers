@@ -5,7 +5,7 @@ module "tf2_server_us" {
   ami                  = var.ami_us
   instance_type        = var.instance_type
   key_name             = var.key_name
-  security_group_id    = var.security_group_id
+  security_group_id    = var.security_group_id_us
   iam_instance_profile = var.iam_instance_profile
   elastic_ip           = var.eip_us
   name                 = "tf2_server_us"
@@ -18,7 +18,7 @@ module "tf2_server_eu" {
   ami                  = var.ami_eu
   instance_type        = var.instance_type
   key_name             = var.key_name
-  security_group_id    = var.security_group_id
+  security_group_id    = var.security_group_id_eu
   iam_instance_profile = var.iam_instance_profile
   elastic_ip           = var.eip_eu
   name                 = "tf2_server_eu"

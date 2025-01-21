@@ -71,7 +71,7 @@ def create_server():
     
     tf2_server_eu = {
         "instance_id": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_id"]).decode().strip(),
-        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_ip"]).decode().strip(),
+        "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_public_ip"]).decode().strip(),
         "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_public_dns"]).decode().strip(),
         "name": "tf2_server_eu",
         "server_hostname": "simple surf server (eu) - upfast.tf"
