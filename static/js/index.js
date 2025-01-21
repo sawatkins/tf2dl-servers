@@ -39,8 +39,13 @@ function updateTableRow(serverInfo) {
 
     // console.log("serverInfo", serverInfo);
 
-    // Always set the region to "us-west" for now until more regions are supported
-    const region = "us-west";
+    // temportary fix
+    if (serverInfo.public_ip === "54.193.198.90") {
+        region = "us-west";
+    }
+    else {
+        region = "eu-central";
+    }
 
     row.innerHTML = `
         <td class="region ${region}">
