@@ -103,7 +103,7 @@ async function pollServers() {
 
     if (ips.length > 0) {
         defaultRow.style.display = 'none';
-
+        ips.sort();
         ips.forEach(ip => {
             fetchServerInfo(ip).then(serverInfo => {
                 updateTableRow(serverInfo);
