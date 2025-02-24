@@ -42,7 +42,7 @@
         <span id="how-to-connect">How to connect</span>
         <span id="refresh">Manual refresh</span>
     </div>
-    <br id="spacer" style="display: none;">
+    <!-- <br id="spacer" style="display: none;"> -->
     <div class="content-area small-text" id="connection-steps">
         <p><span style="font-weight: bold;">How do I connect to the server?</span><br>You can click the "Connect" button
             on
@@ -52,16 +52,17 @@
     </div>
 
 
-    <div class="content-area section-title"><strong>Stats</strong></div>
+    <p class="content-area section-title"><strong>Stats</strong></p>
     <div class="content-area stats">
         <div class="content-area">&bull; &MediumSpace;Total player sessions: <strong>{{ .TotalPlayerSessions }}</strong>
         </div>
         <div class="content-area">&bull; &MediumSpace;Total time played: <strong>{{ .TotalTimePlayedHrs }}</strong> hrs <strong>{{ .TotalTimePlayedMins }}</strong> mins
         </div>
+        <div class="content-area">&bull; &MediumSpace;Last player: <strong>{{ .LastPlayerTime }}</strong> min ago
+        </div>
     </div>
 
-    <br>
-    <div class="content-area section-title"><strong>Status Page</strong></div>
+    <p class="content-area section-title"><strong>Status Page</strong></p>
     <div class="content-area">
         <div class=""><a href="https://status.upfast.tf" style="color: #bababa; text-decoration: underline;"
                 onmouseover="this.style.color='#939393'" onmouseout="this.style.color='#bababa'">status.upfast.tf</a>
@@ -87,15 +88,15 @@
         document.addEventListener('DOMContentLoaded', function () {
             const howToConnect = document.getElementById('how-to-connect');
             const connectionSteps = document.getElementById('connection-steps');
-            const spacer = document.getElementById('spacer');
+            //const spacer = document.getElementById('spacer');
 
             howToConnect.addEventListener('click', function () {
                 if (connectionSteps.style.display === 'none') {
                     connectionSteps.style.display = 'block';
-                    spacer.style.display = 'none';
+                    //spacer.style.display = 'none';
                 } else {
                     connectionSteps.style.display = 'none';
-                    spacer.style.display = '';
+                    //spacer.style.display = '';
                 }
             });
         });

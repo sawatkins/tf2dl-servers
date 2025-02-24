@@ -25,6 +25,7 @@ func Index(c *fiber.Ctx) error {
 		"TotalPlayerSessions": database.GetTotalPlayerSessions(),
 		"TotalTimePlayedHrs":  timePlayedHrs,
 		"TotalTimePlayedMins": timePlayedMin,
+		"LastPlayerTime":      database.GetLastPlayerTime(),
 	}, "layouts/main")
 }
 

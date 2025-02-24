@@ -71,9 +71,9 @@ func ExecuteSQL(sqlStatement string) {
 }
 
 func Close() {
-    if db != nil {
-        db.Close()
-    }
+	if db != nil {
+		db.Close()
+	}
 }
 
 func WriteServerToDB(server *models.Server) error {
@@ -161,6 +161,7 @@ func GetServerInfo(ip string) (models.ServerStatus, error) {
 	return serverStatus, nil
 }
 
+// GetTotalPlayerSessions return the total amount of player sessions
 func GetTotalPlayerSessions() int {
 	var count int
 	query := "SELECT COUNT(*) FROM player_sessions"
@@ -174,6 +175,7 @@ func GetTotalPlayerSessions() int {
 	return count
 }
 
+// GetTotalTimePlayed return the total time of all player sessions in min
 func GetTotalTimePlayed() int {
 	var totalDuration int
 	query := "SELECT SUM(duration) FROM player_sessions"
@@ -186,6 +188,27 @@ func GetTotalTimePlayed() int {
 
 	return totalDuration / 60 // return minues
 }
+
+func GetLastPlayerTime() int {
+	var lastPlayerTime string
+	query := "SELECT connect_time FROM player_sessions WHERE id = (SELECT MAX(id) FROM player_sessions)"
+
+	err := db.QueryRow(query).Scan(&lastPlayerTime)
+	if err != nil {
+		log.Printf("Error querying last player time: %v", err)
+		return 0
+	}
+
+	lastPlayerTimeParsed, err := time.Parse("2006-01-02 15:04:05 -0700 MST", lastPlayerTime)
+	if err != nil {
+		log.Printf("Error parsing last player time: %v", err)
+		return 0
+	}
+
+	duration := time.Since(lastPlayerTimeParsed)
+	return int(duration.Minutes())
+}
+
 // UpdateServerInfo updates the server information and active player connection in the db for each server IP
 func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 	ips, err := GetServerIPs()
@@ -251,7 +274,6 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 
 		log.Printf("Server info updated for IP: %s", ip)
 
-
 		// Update active player connections
 		currentPlayerIds := extractUniqueIDs(response)
 		// log.Println("currentPlayerIds", currentPlayerIds)
@@ -284,12 +306,12 @@ func UpdateServerInfo(prevPlayerConnections *map[string]map[string]int64) {
 			connectTime := time.Unix((*prevPlayerConnections)[ip][id], 0)
 			disconnectTime := time.Now()
 			duration := disconnectTime.Sub(connectTime)
-			newPlayerSession := models.PlayerSession {
-				SteamID: id,
-				ConnectTime: connectTime.String(),
+			newPlayerSession := models.PlayerSession{
+				SteamID:        id,
+				ConnectTime:    connectTime.String(),
 				DisconnectTime: disconnectTime.String(),
-				Duration: int(duration.Seconds()),
-				PublicIP: ip,
+				Duration:       int(duration.Seconds()),
+				PublicIP:       ip,
 			}
 
 			// add newPlayerSession to the player_sessions table
