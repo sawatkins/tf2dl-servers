@@ -12,6 +12,10 @@ func NotFound(c *fiber.Ctx) error {
 }
 
 func Index(c *fiber.Ctx) error {
+	timePlayedTotalMin := database.GetTotalTimePlayed()
+	timePlayedHrs := timePlayedTotalMin / 60
+	timePlayedMin := timePlayedTotalMin % 60
+
 	return c.Render("index", fiber.Map{
 		"Title":               "upfast.tf",
 		"Canonical":           "https://upfast.tf",
@@ -19,7 +23,8 @@ func Index(c *fiber.Ctx) error {
 		"Description":         "Public, Dedicated Team Fortress 2 Servers",
 		"Keywords":            "upfast.tf, upfast, tf2, servers, hosting, game, server, hosting",
 		"TotalPlayerSessions": database.GetTotalPlayerSessions(),
-		"TotalTimePlayed":     database.GetTotalTimePlayed(),
+		"TotalTimePlayedHrs":  timePlayedHrs,
+		"TotalTimePlayedMins": timePlayedMin,
 	}, "layouts/main")
 }
 
