@@ -89,7 +89,7 @@ function setReadyState() {
 
 // Modified pollServers function
 async function pollServers() {
-    console.log("polling servers...");
+    //console.log("polling servers...");
     setRefreshingState();
 
     const ips = await Promise.race([
@@ -103,15 +103,18 @@ async function pollServers() {
 
     if (ips.length > 0) {
         defaultRow.style.display = 'none';
-        ips.sort();
-        ips.forEach(ip => {
-            fetchServerInfo(ip).then(serverInfo => {
-                updateTableRow(serverInfo);
-            });
-        });
+        ips.sort().reverse();
+        
+        const serverInfos = await Promise.all(ips.map(async (ip) => {
+            const serverInfo = await fetchServerInfo(ip);
+            return serverInfo;
+        }));
+
+        for (const serverInfo of serverInfos) {
+            updateTableRow(serverInfo);
+        }
     } else {
         defaultRow.style.display = 'table-row';
-        // Remove all rows except the header and default row
         Array.from(table.rows).forEach(row => {
             if (row !== headerRow && row !== defaultRow) {
                 row.remove();
