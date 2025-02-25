@@ -15,6 +15,9 @@ func Index(c *fiber.Ctx) error {
 	timePlayedTotalMin := database.GetTotalTimePlayed()
 	timePlayedHrs := timePlayedTotalMin / 60
 	timePlayedMin := timePlayedTotalMin % 60
+	lastPlayerTimeTotal := database.GetLastPlayerTime()
+	lastPlayerHrs := lastPlayerTimeTotal / 60
+	lastPlayerMin := lastPlayerTimeTotal % 60
 
 	return c.Render("index", fiber.Map{
 		"Title":               "upfast.tf",
@@ -25,7 +28,8 @@ func Index(c *fiber.Ctx) error {
 		"TotalPlayerSessions": database.GetTotalPlayerSessions(),
 		"TotalTimePlayedHrs":  timePlayedHrs,
 		"TotalTimePlayedMins": timePlayedMin,
-		"LastPlayerTime":      database.GetLastPlayerTime(),
+		"LastPlayerTimeHrs":   lastPlayerHrs,
+		"LastPlayerTimeMin":   lastPlayerMin,
 	}, "layouts/main")
 }
 

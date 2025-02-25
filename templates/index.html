@@ -58,7 +58,7 @@
         </div>
         <div class="content-area">&bull; &MediumSpace;Total time played: <strong>{{ .TotalTimePlayedHrs }}</strong> hrs <strong>{{ .TotalTimePlayedMins }}</strong> mins
         </div>
-        <div class="content-area">&bull; &MediumSpace;Last player: <strong>{{ .LastPlayerTime }}</strong> min ago
+        <div class="content-area">&bull; &MediumSpace;Last player: {{if gt .LastPlayerTimeHrs 0}}<strong>{{ .LastPlayerTimeHrs }}</strong> hrs {{end}}<strong>{{ .LastPlayerTimeMin }}</strong> mins ago
         </div>
     </div>
 
