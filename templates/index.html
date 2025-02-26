@@ -56,9 +56,9 @@
     <div class="content-area stats">
         <div class="content-area">&bull; &MediumSpace;Total player sessions: <strong>{{ .TotalPlayerSessions }}</strong>
         </div>
-        <div class="content-area">&bull; &MediumSpace;Total time played: <strong>{{ .TotalTimePlayedHrs }}</strong> hrs <strong>{{ .TotalTimePlayedMins }}</strong> mins
+        <div class="content-area">&bull; &MediumSpace;Total time played: <strong>{{ .TotalTimePlayedHrs }}</strong> hrs <strong>{{ .TotalTimePlayedMins }}</strong> {{if eq .TotalTimePlayedMins 1}}min{{else}}mins{{end}}
         </div>
-        <div class="content-area">&bull; &MediumSpace;Last player: {{if gt .LastPlayerTimeHrs 0}}<strong>{{ .LastPlayerTimeHrs }}</strong> hrs {{end}}<strong>{{ .LastPlayerTimeMin }}</strong> mins ago
+        <div class="content-area">&bull; &MediumSpace;Last player: {{if gt .LastPlayerTimeHrs 0}}<strong>{{ .LastPlayerTimeHrs }}</strong> {{if eq .LastPlayerTimeHrs 1}}hr{{else}}hrs{{end}} {{end}}<strong>{{ .LastPlayerTimeMin }}</strong> {{if eq .LastPlayerTimeMin 1}}min{{else}}mins{{end}} ago
         </div>
     </div>
 
