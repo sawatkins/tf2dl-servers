@@ -208,7 +208,7 @@ func GetLastPlayerTime() int {
 	}
 
 	timeSinceConnect := time.Since(lastPlayerTimeParsed)
-	return int(timeSinceConnect.Minutes()) + duration / 60
+	return int(timeSinceConnect.Minutes()) - duration / 60
 }
 
 // UpdateServerInfo updates the server information and active player connection in the db for each server IP
