@@ -189,11 +189,13 @@ func GetTotalTimePlayed() int {
 	return totalDuration / 60 // return minues
 }
 
+// GetLastPlayerTime return the time in min of the last player
 func GetLastPlayerTime() int {
 	var lastPlayerTime string
-	query := "SELECT connect_time FROM player_sessions WHERE id = (SELECT MAX(id) FROM player_sessions)"
+	var duration int
+	query := "SELECT connect_time, duration FROM player_sessions WHERE id = (SELECT MAX(id) FROM player_sessions)"
 
-	err := db.QueryRow(query).Scan(&lastPlayerTime)
+	err := db.QueryRow(query).Scan(&lastPlayerTime, &duration)
 	if err != nil {
 		log.Printf("Error querying last player time: %v", err)
 		return 0
@@ -205,8 +207,8 @@ func GetLastPlayerTime() int {
 		return 0
 	}
 
-	duration := time.Since(lastPlayerTimeParsed)
-	return int(duration.Minutes())
+	timeSinceConnect := time.Since(lastPlayerTimeParsed)
+	return int(timeSinceConnect.Minutes()) + duration / 60
 }
 
 // UpdateServerInfo updates the server information and active player connection in the db for each server IP
