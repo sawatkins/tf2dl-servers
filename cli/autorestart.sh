@@ -13,6 +13,16 @@ if ! command -v jq > /dev/null 2>&1; then
     exit 1
 fi
 
+# date for logs
+date 
+
+# if service is down, restart
+if ! systemctl is-active --quiet tf2server.service; then
+  systemctl restart tf2server.service
+  echo "service was down, restarted..."
+  exit 0
+fi
+
 # check memory usage
 memory_used=$(free -m | awk '/Mem:/ {print int($3/$2 * 100)}')
 if [ "$memory_used" -lt 93 ]; then
