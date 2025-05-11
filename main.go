@@ -3,6 +3,9 @@ package main
 import (
 	"flag"
 	"log"
+	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -10,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/html/v2"
 	"github.com/joho/godotenv"
+	"github.com/mmcdole/gofeed"
 
 	"github.com/sawatkins/upfast-tf/database"
 	"github.com/sawatkins/upfast-tf/handlers"
@@ -28,6 +32,7 @@ func main() {
 	database.InitServerTable()
 	database.InitPlayerSessionTable()
 	go startServerInfoUpdater()
+	go checkForGameUpdate()
 
 	engine := html.New("./templates", ".html")
 	if *dev {
@@ -61,5 +66,42 @@ func startServerInfoUpdater() {
 	defer ticker.Stop()
 	for range ticker.C {
 		database.UpdateServerInfo(&prevPlayerConnections)
+	}
+}
+
+func checkForGameUpdate() {
+	prevItemDate := time.Time{}
+	ticker := time.NewTicker(3 * time.Hour)
+	defer ticker.Stop()
+	for range ticker.C {
+		resp, err := http.Get("https://www.teamfortress.com/rss.xml")
+		log.Println("Fetching rss feed")
+		if err != nil {
+			log.Printf("Error fetching TF2 RSS feed: %v", err)
+			continue
+		}
+
+		feed, err := gofeed.NewParser().Parse(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			log.Printf("Error parsing TF2 RSS feed: %v", err)
+			continue
+		}
+
+		if len(feed.Items) == 0 {
+			continue
+		}
+
+		latestItem := feed.Items[0]
+		newItemDate := *latestItem.PublishedParsed
+		if !newItemDate.After(prevItemDate) {
+			continue
+		}
+
+		prevItemDate = newItemDate
+		if strings.Contains(latestItem.Title, "Team Fortress 2 Update Released") {
+			log.Printf("New TF2 update")
+			http.Post(os.Getenv("NOTIFY_URL"), "text/plain", strings.NewReader("New TF2 Update Released!"))
+		}
 	}
 }
