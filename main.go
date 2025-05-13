@@ -101,7 +101,13 @@ func checkForGameUpdate() {
 		prevItemDate = newItemDate
 		if strings.Contains(latestItem.Title, "Team Fortress 2 Update Released") {
 			log.Printf("New TF2 update")
-			http.Post(os.Getenv("NOTIFY_URL"), "text/plain", strings.NewReader("New TF2 Update Released!"))
+			_, err := http.Post(os.Getenv("NOTIFY_URL"), "text/plain", strings.NewReader("New TF2 Update Released!"))
+			if err != nil {
+				log.Printf("Error sending update notification: %v", err)
+			} else {
+				log.Println("Successfully send update notification")
+			}
+			
 		}
 	}
 }
