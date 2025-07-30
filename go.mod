@@ -1,4 +1,4 @@
-module github.com/sawatkins/upfast-tf
+module github.com/sawatkins/tf2dl-servers
 
 go 1.23.0
 
@@ -9,7 +9,7 @@ require (
 	github.com/gofiber/template/html/v2 v2.1.3
 	github.com/gorcon/rcon v1.4.0
 	github.com/joho/godotenv v1.5.1
-	github.com/mattn/go-sqlite3 v1.14.28
+	github.com/mattn/go-sqlite3 v1.14.29
 	github.com/mmcdole/gofeed v1.3.0
 )
 

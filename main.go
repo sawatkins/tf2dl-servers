@@ -15,8 +15,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/mmcdole/gofeed"
 
-	"github.com/sawatkins/upfast-tf/database"
-	"github.com/sawatkins/upfast-tf/handlers"
+	"github.com/sawatkins/tf2dl-servers/database"
+	"github.com/sawatkins/tf2dl-servers/handlers"
 )
 
 func main() {
@@ -109,7 +109,7 @@ func checkForGameUpdate() {
 			} else {
 				log.Println("Successfully send update notification")
 			}
-			
+
 		}
 	}
 }

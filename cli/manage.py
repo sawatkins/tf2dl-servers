@@ -65,7 +65,7 @@ def create_server():
         "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_us_public_ip"]).decode().strip(), # TODO get the elastic ip
         "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_us_public_dns"]).decode().strip(),
         "name": "tf2_server_us",
-        "server_hostname": "simple surf server (us) - upfast.tf"
+        "server_hostname": "simple surf server (us) - servers.tf2dl.net"
     }
     write_server_to_curent_servers_file(tf2_server_us)
     
@@ -74,7 +74,7 @@ def create_server():
         "public_ip": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_public_ip"]).decode().strip(),
         "public_dns": subprocess.check_output(["terraform", "output", "-raw", "tf2_server_eu_public_dns"]).decode().strip(),
         "name": "tf2_server_eu",
-        "server_hostname": "simple surf server (eu) - upfast.tf"
+        "server_hostname": "simple surf server (eu) - servers.tf2dl.net"
     }
     write_server_to_curent_servers_file(tf2_server_eu)
     
@@ -133,7 +133,7 @@ def main():
                 key, value = line.strip().split("=")
                 os.environ[key] = value
 
-    parser = argparse.ArgumentParser(description="manage upfast.tf servers")
+    parser = argparse.ArgumentParser(description="manage servers.tf2dl.net servers")
     parser.add_argument("command", choices=["create", "destroy", "list", "connect", "write_db"], help="command to execute")
 
     args = parser.parse_args()

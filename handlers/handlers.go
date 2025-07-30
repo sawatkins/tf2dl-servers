@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/sawatkins/upfast-tf/database"
+	"github.com/sawatkins/tf2dl-servers/database"
 )
 
 func NotFound(c *fiber.Ctx) error {
@@ -20,11 +20,11 @@ func Index(c *fiber.Ctx) error {
 	lastPlayerMin := lastPlayerTimeTotal % 60
 
 	return c.Render("index", fiber.Map{
-		"Title":               "upfast.tf",
-		"Canonical":           "https://upfast.tf",
+		"Title":               "Simple TF2 Surf Servers - servers.tf2dl.net",
+		"Canonical":           "https://servers.tf2dl.net",
 		"Robots":              "index, follow",
 		"Description":         "Public, Dedicated Team Fortress 2 Servers",
-		"Keywords":            "upfast.tf, upfast, tf2, servers, hosting, game, server, hosting",
+		"Keywords":            "servers.tf2dl.net, upfast, tf2, servers, hosting, game, server, hosting",
 		"TotalPlayerSessions": database.GetTotalPlayerSessions(),
 		"TotalTimePlayedHrs":  timePlayedHrs,
 		"TotalTimePlayedMins": timePlayedMin,
@@ -35,11 +35,11 @@ func Index(c *fiber.Ctx) error {
 
 func About(c *fiber.Ctx) error {
 	return c.Render("about", fiber.Map{
-		"Title":       "About - upfast.tf",
-		"Canonical":   "https://upfast.tf/about",
+		"Title":       "About - servers.tf2dl.net",
+		"Canonical":   "https://servers.tf2dl.net/about",
 		"Robots":      "index, follow",
-		"Description": "About upfast.tf",
-		"Keywords":    "upfast.tf, upfast, tf2, servers, hosting, game, server, hosting",
+		"Description": "About servers.tf2dl.net",
+		"Keywords":    "servers.tf2dl.net, upfast, tf2, servers, hosting, game, server, hosting",
 	}, "layouts/main")
 }
 

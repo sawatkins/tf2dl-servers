@@ -5,8 +5,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	"github.com/sawatkins/upfast-tf/database"
-	"github.com/sawatkins/upfast-tf/models"
+	"github.com/sawatkins/tf2dl-servers/database"
+	"github.com/sawatkins/tf2dl-servers/models"
 )
 
 func PostCurrentServer(c *fiber.Ctx) error {

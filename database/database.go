@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorcon/rcon"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/sawatkins/upfast-tf/models"
+	"github.com/sawatkins/tf2dl-servers/models"
 )
 
 var db *sql.DB
@@ -208,7 +208,7 @@ func GetLastPlayerTime() int {
 	}
 
 	timeSinceConnect := time.Since(lastPlayerTimeParsed)
-	return int(timeSinceConnect.Minutes()) - duration / 60
+	return int(timeSinceConnect.Minutes()) - duration/60
 }
 
 // UpdateServerInfo updates the server information and active player connection in the db for each server IP

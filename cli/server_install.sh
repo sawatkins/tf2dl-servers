@@ -63,10 +63,10 @@ rm steamcmd_linux.tar.gz
 # install custom maps
 mkdir -p ~/hlserver/tf2/tf/maps
 cd ~/hlserver/tf2/tf/maps
-wget https://upfast.tf/maps/surf_utopia_v3.bsp
-wget https://upfast.tf/maps/surf_rainbow_v1.bsp
-wget https://upfast.tf/maps/surf_utopia_v3.bsp.bz2
-wget https://upfast.tf/maps/surf_rainbow_v1.bsp.bz2
+wget https://servers.tf2dl.net/maps/surf_utopia_v3.bsp
+wget https://servers.tf2dl.net/maps/surf_rainbow_v1.bsp
+wget https://servers.tf2dl.net/maps/surf_utopia_v3.bsp.bz2
+wget https://servers.tf2dl.net/maps/surf_rainbow_v1.bsp.bz2
 
 # create tf2 config files
 cd ~/hlserver/tf2/tf/cfg

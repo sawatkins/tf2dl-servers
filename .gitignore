@@ -24,3 +24,5 @@ data-dev/
 __pycache__/
 maps/
 build.sh
+*.pem
+terraform-archive/

@@ -37,7 +37,7 @@ if [ ! -e "/home/admin/public_ip" ]; then
 fi
 
 public_ip=$(cat /home/admin/public_ip)
-server_info=$(curl -s "https://upfast.tf/api/server-info?ip=$public_ip")
+server_info=$(curl -s "https://servers.tf2dl.net/api/server-info?ip=$public_ip")
 if [ -z "$server_info" ]; then
     echo "failed to get server info"
     exit 1

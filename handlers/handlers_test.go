@@ -7,7 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
-	"github.com/sawatkins/upfast-tf/database"
+	"github.com/sawatkins/tf2dl-servers/database"
 )
 
 // Test 404 handler
