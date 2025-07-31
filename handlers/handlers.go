@@ -24,7 +24,7 @@ func Index(c *fiber.Ctx) error {
 		"Canonical":           "https://servers.tf2dl.net",
 		"Robots":              "index, follow",
 		"Description":         "Public, Dedicated Team Fortress 2 Servers",
-		"Keywords":            "servers.tf2dl.net, upfast, tf2, servers, hosting, game, server, hosting",
+		"Keywords":            "servers.tf2dl.net, tf2, servers, hosting, game, server, hosting",
 		"TotalPlayerSessions": database.GetTotalPlayerSessions(),
 		"TotalTimePlayedHrs":  timePlayedHrs,
 		"TotalTimePlayedMins": timePlayedMin,
@@ -39,7 +39,7 @@ func About(c *fiber.Ctx) error {
 		"Canonical":   "https://servers.tf2dl.net/about",
 		"Robots":      "index, follow",
 		"Description": "About servers.tf2dl.net",
-		"Keywords":    "servers.tf2dl.net, upfast, tf2, servers, hosting, game, server, hosting",
+		"Keywords":    "servers.tf2dl.net, tf2, servers, hosting, game, server, hosting",
 	}, "layouts/main")
 }
 

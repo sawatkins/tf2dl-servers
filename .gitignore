@@ -26,3 +26,4 @@ maps/
 build.sh
 *.pem
 terraform-archive/
+CLAUDE.md
